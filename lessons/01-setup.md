@@ -39,27 +39,58 @@
 > [!TIP]
 > Thonny won't connect, no `>>>` prompt, or the board seems possessed? The [Troubleshooting & FAQ](../TROUBLESHOOTING.md) covers the common failures — starting with charge-only USB cables and the wrong COM port.
 
-## 3. Blink test — confirm your wiring
+## 3. Wiring test — confirm every component
 
-Run this first. If LED 1 blinks, your output wiring and toolchain are good.
+Run [`code/wiring_test.py`](../code/wiring_test.py) and follow the printed prompts. It checks the whole breadboard in order: LED 1 blinks, LED 2 blinks, the buzzer beeps twice, then it waits for you to press each button (and beeps to confirm each press). It ends with **"All wiring checks passed!"** — don't move on to Part A until you see it.
 
 ```python
 from machine import Pin
 import time
 
 led1 = Pin(26, Pin.OUT)
+led2 = Pin(27, Pin.OUT)
+buzzer = Pin(25, Pin.OUT)
+btnA = Pin(18, Pin.IN, Pin.PULL_UP)
+btnB = Pin(5, Pin.IN, Pin.PULL_UP)
 
-for _ in range(6):
-    led1.on()
-    time.sleep(0.25)
-    led1.off()
-    time.sleep(0.25)
+def blink(led, name):
+    print("[TEST]", name, "-- watch it blink 3 times")
+    for _ in range(3):
+        led.on(); time.sleep(0.3)
+        led.off(); time.sleep(0.3)
 
-print("Blink test complete")
+def wait_press(btn, name):
+    if btn.value() == 0:
+        print("[WARN]", name, "already reads PRESSED -- check its wiring")
+    print("[TEST] Press", name, "now...")
+    while btn.value() == 1:
+        time.sleep(0.01)
+    print("       ", name, "OK")
+    buzzer.on(); time.sleep(0.1); buzzer.off()
+    while btn.value() == 0:      # wait for release
+        time.sleep(0.01)
+    time.sleep(0.2)
+
+blink(led1, "LED 1 (red, GPIO 26)")
+blink(led2, "LED 2 (green, GPIO 27)")
+
+print("[TEST] Buzzer -- listen for two beeps")
+for _ in range(2):
+    buzzer.on(); time.sleep(0.15)
+    buzzer.off(); time.sleep(0.25)
+
+wait_press(btnA, "Button A (red cap, GPIO 18)")
+wait_press(btnB, "Button B (green cap, GPIO 5)")
+
+print()
+print("All wiring checks passed! Your breadboard is ready.")
 ```
 
 > [!WARNING]
-> **No blink?** Check LED polarity (long leg = anode = GPIO side; short leg → resistor → GND), confirm the resistor is in series, and make sure the jumper reaches the correct GPIO column on the breadboard.
+> **A step failed?** Fix that one component before moving on — the test names the exact pin. LEDs: check polarity (long leg = anode = GPIO side; short leg → resistor → GND) and that the resistor is in series. Buttons: if the test says a button already reads pressed, the pin is shorted to GND; if pressing does nothing, the button legs aren't bridging the pin to GND (use opposite corners). More help: [Troubleshooting & FAQ](../TROUBLESHOOTING.md).
+
+> [!NOTE]
+> Two things to notice, both of which matter later: the onboard **DotStar isn't tested here** — it needs a library you'll install in [Part C](04-part-c-dotstar.md). And this test is *synchronous* code — each step blocks until it finishes, which is fine for a step-by-step checklist. By the end of the session you'll know exactly when it stops being fine.
 
 ---
 

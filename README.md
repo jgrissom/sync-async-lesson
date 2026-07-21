@@ -30,6 +30,7 @@ Something not working? → **[Troubleshooting & FAQ](TROUBLESHOOTING.md)** (wron
 
 | File | What it is |
 |---|---|
+| [`code/wiring_test.py`](code/wiring_test.py) | Warm-up: guided check of every component after wiring |
 | [`code/reaction_game_STARTER.py`](code/reaction_game_STARTER.py) | Scaffold students fill in (three TODOs) |
 | [`code/debounce_test.py`](code/debounce_test.py) | Part D hardware-debounce test code |
 
