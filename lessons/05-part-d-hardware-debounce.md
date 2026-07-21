@@ -11,15 +11,49 @@
 
 In Part B you debounced buttons in **software** with `await asyncio.sleep(0.15)`. A mechanical switch can also be debounced in **hardware** — a small ceramic capacitor across the button smooths out the electrical "bounce" before the pin ever sees it. This segment lets students compare the two approaches, and compare capacitor values against each other.
 
-## 1. The idea: RC filtering
+## 1. First: what does a capacitor actually do?
 
-A capacitor placed between the GPIO pin and GND, together with the ESP32's internal pull-up resistor, forms an **RC low-pass filter**. Rapid bounce transitions get "averaged out" so the pin reads one clean press. The key quantity is the time constant, `τ = R × C`:
+A capacitor is two metal plates separated by a thin insulator. It **stores electric charge** — think of it as a tiny rechargeable bucket. Two properties matter here:
+
+1. **The voltage across a capacitor cannot jump instantly.** To change it, charge has to physically flow in or out of the plates first.
+2. **A resistor in the path limits how fast that charge can flow** — like filling a bucket through a narrow hose. Big bucket (more capacitance) or narrow hose (more resistance) = slower fill.
+
+That combination — *voltage that can only change gradually* — is why capacitors show up everywhere in electronics:
+
+- **Smoothing** power supplies (riding out brief dips and spikes)
+- **Filtering** noise out of signals ← *what we're doing today*
+- **Timing** circuits (the charge time *is* the delay)
+- **Decoupling** — the little cap you'll see parked next to almost every chip on a circuit board, feeding it charge during sudden demand
+
+For debouncing, the intuition is: switch bounce is a burst of very fast voltage spikes. A capacitor is a bucket that fast spikes are too brief to fill or empty — so they vanish. A real, sustained press is slow enough to move the bucket's level all the way.
+
+## 2. The RC filter and τ = R × C
+
+Our circuit has three parts: the ESP32's internal **pull-up resistor** (R) connecting the pin to 3.3 V, the **capacitor** (C) from the pin to GND, and the button across the capacitor. Together R and C form an **RC low-pass filter**: slow changes pass through, fast changes ("high frequencies" — like bounce) are smoothed away.
+
+- **Press:** the button shorts the capacitor to GND — it empties almost instantly, and the pin reads `0` right away. Presses still feel immediate.
+- **Bounce:** each bounce glitch opens the contact for only a few *microseconds to a millisecond*. In that blink, the capacitor can only recharge a tiny fraction through the pull-up — nowhere near enough for the pin to read `1`. The glitch is invisible.
+- **Release:** the contact stays open, so the capacitor charges steadily through the pull-up until the pin cleanly reads `1` a few milliseconds later.
+
+How fast is "steadily"? That's exactly what the **time constant** measures:
 
 $$\tau = R \times C$$
 
-With the internal pull-up (~45 kΩ) and a 100 nF cap: τ ≈ 45,000 × 0.0000001 ≈ 4.5 ms — long enough to swallow the bounce, short enough that a real press still feels instant. Bigger cap = more filtering, but too big and quick presses get rounded off.
+- **Units check:** ohms × farads = **seconds**. The formula hands you a time.
+- **What τ means physically:** after one τ, the capacitor has covered about **63%** of the way to its target voltage; after about **5τ** it's essentially all the way there. (The curve is a rising exponential, $V(t) = V_{max}(1 - e^{-t/\tau})$ — fast at first, then leveling off, like a bucket filling from a hose that slows as pressure equalizes.)
 
-## 2. The three caps under test
+**Worked example** — internal pull-up ≈ 45 kΩ, cap = 100 nF (that's 100 × 10⁻⁹ F):
+
+$$\tau = 45{,}000 \ \Omega \times 0.000\,000\,1 \ \text{F} = 0.0045 \ \text{s} = 4.5 \ \text{ms}$$
+
+Now compare timescales, because that comparison *is* the design: bounce glitches last roughly 0.01–1 ms — much shorter than τ = 4.5 ms, so they're swallowed. A human noticing lag takes ~50+ ms — much longer than 4.5 ms, so the filter is imperceptible. The `104` cap sits in the comfortable gap between the two.
+
+That gap is also the trade-off knob: **bigger C → bigger τ → stronger filtering, but a slower, "rounder" response.** Push τ toward human-noticeable territory (the `105`'s ~45 ms) and presses start to feel laggy. Shrink it toward bounce territory (the `103`'s ~0.45 ms) and glitches sneak through. You'll *feel* both failure modes in the experiment below.
+
+> [!NOTE]
+> **Reading capacitor units:** capacitance is measured in farads (F), but a whole farad is enormous — real caps are labeled in **µF** (10⁻⁶), **nF** (10⁻⁹), and **pF** (10⁻¹²). Handy ladder: 1 µF = 1,000 nF = 1,000,000 pF.
+
+## 3. The three caps under test
 
 Ceramic capacitors are marked with a 3-digit code (first two digits + number of zeros, in picofarads). Students will compare:
 
@@ -32,7 +66,7 @@ Ceramic capacitors are marked with a 3-digit code (first two digits + number of 
 > [!TIP]
 > **Prediction first:** Before wiring, have each group **write down** which cap they think will feel best and why. Predicting before measuring is the point of the experiment.
 
-## 3. Wiring
+## 4. Wiring
 
 Only one small change to the existing circuit — add a capacitor across Button A (between GPIO 18 and GND). Leave Button B with no cap so students have a live software-only comparison right next to it.
 
@@ -43,7 +77,7 @@ Only one small change to the existing circuit — add a capacitor across Button 
 > [!CAUTION]
 > These are tiny signal-level ceramic caps at 3.3 V — completely safe to handle. This is a good moment to mention that larger **electrolytic** caps *are* polarised and can be damaged (or worse) if reversed, which is why the flyback-diode / motor topic belongs in its own later session.
 
-## 4. Test code
+## 5. Test code
 
 This counts how many times each button "fires" for a single physical press. A perfectly debounced button counts exactly 1 per press; a bouncy one counts 2, 3, or more. Run it, press each button 10 times, and compare the counts.
 
@@ -83,7 +117,7 @@ asyncio.run(main())
 > [!TIP]
 > **What to look for:** Button B (no cap) will often over-count — one press registers as 2+ because the software debounce has been removed. Button A with a `104` cap should stay much closer to a clean 1-per-press. Then swap A's cap for `103` and `105` and re-run to feel the difference.
 
-## 5. The experiment (comparative)
+## 6. The experiment (comparative)
 
 1. Predict which cap (`103` / `104` / `105`) will give the cleanest 1-per-press count. Write it down.
 2. With the `104` cap on Button A, press each button 10 times. Record counts for A and B.
@@ -91,7 +125,7 @@ asyncio.run(main())
 4. Swap the `103` for a `105`, reset, and repeat. Record.
 5. Compare all three against Button B (no cap) and against your prediction.
 
-## 6. Results table (students fill in)
+## 7. Results table (students fill in)
 
 | Cap on Button A | Presses | A counted | B counted | Cleanest? |
 |---|---|---|---|---|
@@ -99,7 +133,7 @@ asyncio.run(main())
 | `104` (100 nF) | 10 | | | |
 | `105` (1 µF) | 10 | | | |
 
-## 7. Discussion — hardware vs. software debounce
+## 8. Discussion — hardware vs. software debounce
 
 - Which cap felt best? Did it match your prediction?
 - Why might `105` make presses feel laggy even though it "debounces" well? *(Its ~45 ms time constant starts delaying the real signal.)*
