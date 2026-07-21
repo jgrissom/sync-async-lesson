@@ -13,8 +13,8 @@
 
 | Component | TinyPICO GPIO | Wiring notes |
 |---|---|---|
-| LED 1 (red) | GPIO 26 | Anode → 330 Ω → GPIO 26; cathode → GND |
-| LED 2 (green) | GPIO 27 | Anode → 330 Ω → GPIO 27; cathode → GND |
+| LED 1 (red) | GPIO 26 | GPIO 26 → anode; cathode → 330 Ω → GND |
+| LED 2 (green) | GPIO 27 | GPIO 27 → anode; cathode → 330 Ω → GND |
 | Buzzer | GPIO 25 | + leg → GPIO 25; – leg → GND |
 | Button A (red cap) | GPIO 18 | One leg → GPIO 18; opposite leg → GND |
 | Button B (green cap) | GPIO 5 | One leg → GPIO 5; opposite leg → GND |
@@ -25,7 +25,7 @@
 
 ### Wiring diagram
 
-![Wiring diagram: TinyPICO GPIOs 26/27 through 330 Ω resistors to the red and green LEDs, GPIO 25 to the buzzer, GPIOs 18/5 to buttons A and B, all returning to the GND rail](../diagrams/wiring.svg)
+![Wiring diagram: TinyPICO GPIOs 26/27 to the red and green LEDs, each through a 330 Ω resistor to GND; GPIO 25 to the buzzer; GPIOs 18/5 to buttons A and B; all returning to the GND rail](../diagrams/wiring.svg)
 
 *Printable version: open [`diagrams/wiring.svg`](../diagrams/wiring.svg) directly and print it — one per bench is handy.*
 
@@ -59,7 +59,7 @@ print("Blink test complete")
 ```
 
 > [!WARNING]
-> **No blink?** Check LED polarity (long leg = anode = resistor side), confirm the resistor is in series, and make sure the jumper reaches the correct GPIO column on the breadboard.
+> **No blink?** Check LED polarity (long leg = anode = GPIO side; short leg → resistor → GND), confirm the resistor is in series, and make sure the jumper reaches the correct GPIO column on the breadboard.
 
 ---
 

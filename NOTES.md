@@ -59,7 +59,10 @@ reassigned to an output or to anything that sits low at boot.
   resistors on buttons) and to introduce the "pressed reads 0" idiom, which
   students will meet constantly in real hardware. All code and prose must stay
   consistent with active-low.
-- **LEDs: 330 Ω series resistors**, anode to GPIO, cathode to GND.
+- **LEDs: 330 Ω series resistors on the cathode (GND) side** — GPIO → anode,
+  cathode → resistor → GND. Electrically identical to anode-side (series loop),
+  but documented this way round because it matches the instructor bench build;
+  keep diagram and prose consistent with it.
 - **Wire with USB unplugged** — stated in setup; keep it in any new wiring steps.
 
 ## 4. Library decisions (verified against the official repos)

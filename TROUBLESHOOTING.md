@@ -58,7 +58,7 @@ Stop/Restart button. If it persists: unplug the board, close Thonny, plug in, re
 
 ### An LED never lights
 
-- **Polarity:** long leg (anode) goes to the resistor/GPIO side, short leg to GND — see the [wiring diagram](diagrams/wiring.svg).
+- **Polarity:** long leg (anode) goes to the GPIO side; short leg (cathode) to the resistor, then GND — see the [wiring diagram](diagrams/wiring.svg). (Resistor on the anode side works too — it just has to be *somewhere* in the series loop.)
 - The 330 Ω resistor must be **in series** (in the same current path), not on a random row.
 - Jumper actually in the GPIO's breadboard column? Off-by-one rows are the classic.
 - Test the pin from the REPL: `from machine import Pin; Pin(26, Pin.OUT).on()` — if the LED lights now, the problem was the program, not the wiring.
