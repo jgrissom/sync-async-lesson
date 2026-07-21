@@ -11,7 +11,7 @@
 
 ## 1. Recap: what the one-liner can't see
 
-B3's fix — `await asyncio.sleep(0.15)` after a detected press — **ignores time**: it goes deaf for 150 ms and hopes the bounce is over when it wakes up. That guards the press, but nothing guards the *release*. If release chatter flickers the pin `1` → `0` after the counter has re-armed, that's a fresh falling edge, and it counts as a phantom press.
+B3's fix — a 150 ms sleep after a detected press (`time.sleep` in the test rig, `await asyncio.sleep` in B2's coroutine) — **ignores time**: it goes deaf and hopes the bounce is over when it wakes up. That guards the press, but nothing guards the *release*. If release chatter flickers the pin `1` → `0` after the counter has re-armed, that's a fresh falling edge, and it counts as a phantom press.
 
 ## 2. The idea: don't ignore time — require stability
 
@@ -23,30 +23,26 @@ Upgrade B3's counter. Same immediate response on press; the change is entirely i
 
 ```python
 from machine import Pin
-import uasyncio as asyncio
+import time
 
 btnA = Pin(18, Pin.IN, Pin.PULL_UP)
+
 count = 0
+while True:
+    # 1. Wait for a press
+    while btnA.value() == 1:
+        time.sleep(0.01)
 
-async def count_presses_robust():
-    global count
-    while True:
-        # 1. Wait for a press
-        while btnA.value() == 1:
-            await asyncio.sleep(0.01)
+    count += 1
+    print("press", count)          # respond immediately, like B3
 
-        count += 1
-        print("press", count)          # respond immediately, like B3
-
-        # 2. Re-arm ONLY after a STABLE release:
-        #    two consecutive released reads = released for a full 20 ms.
-        #    Any bounce back to 0 resets the count to zero.
-        stable = 0
-        while stable < 2:
-            await asyncio.sleep(0.01)
-            stable = stable + 1 if btnA.value() == 1 else 0
-
-asyncio.run(count_presses_robust())
+    # 2. Re-arm ONLY after a STABLE release:
+    #    two consecutive released reads = released for a full 20 ms.
+    #    Any bounce back to 0 resets the count to zero.
+    stable = 0
+    while stable < 2:
+        time.sleep(0.01)
+        stable = stable + 1 if btnA.value() == 1 else 0
 ```
 
 The whole trick is the `stable` counter: a `1` reading earns a point, any `0` reading resets to zero, and only two points in a row unlock the next press. Release chatter — brief `1`s interrupted by `0`s — can never bank two in a row.
@@ -97,7 +93,7 @@ The capacitor averages *voltage* over time — spikes too brief to move its char
 
 </details>
 
-**Q4. Refactor challenge: extract the logic into a reusable `async def clean_press(btn)` helper any program could call.**
+**Q4. Refactor challenge: extract the logic into a reusable helper — and make it `async def clean_press(btn)`, so real (concurrent) programs like the reaction game could call it without blocking their other tasks.**
 
 <details>
 <summary>One possible answer</summary>

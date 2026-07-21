@@ -109,40 +109,53 @@ asyncio.run(main())
 
 ## B3 — see the bounce for yourself
 
-B2's button coroutine contains a mysterious `await asyncio.sleep(0.15)` labeled "crude debounce." Before trusting it, let's *see* the problem it solves. Mechanical switches don't close cleanly — the metal contacts physically vibrate, producing a burst of rapid on/off transitions called **bounce**. The burst is *fast*: often over in under a millisecond.
+B2's button coroutine contains a mysterious `await asyncio.sleep(0.15)` labeled "crude debounce." Before trusting it, let's *see* the problem it solves — with the simplest possible instrument. Mechanical switches don't close cleanly: the contacts physically vibrate as they meet, producing a burst of rapid on/off transitions called **bounce**, often over in under a millisecond.
 
-That speed dictates how this rig is built. To catch bounce you have to look at the pin more often than it changes — a counter that naps even 1 ms between looks can sleep through an entire burst and wake to a settled pin, accidentally debouncing the very thing it's trying to expose. So this counter uses `await asyncio.sleep(0)`: it *yields* to the scheduler (staying a good async citizen) but doesn't *wait*, polling flat-out. It has **no debounce at all** and counts every falling edge it sees:
+Catching something that fast takes the fastest loop MicroPython can run: a plain synchronous `while True` with **no sleep anywhere**. No asyncio, no delays — this program hogs the CPU on purpose, because watching one pin is its only job. It has **no debounce** and counts every falling edge it sees:
 
 ```python
 from machine import Pin
-import uasyncio as asyncio
 
 btnA = Pin(18, Pin.IN, Pin.PULL_UP)
+
 count = 0
-
-async def count_presses():
-    global count
-    prev = 1
-    while True:
-        now = btnA.value()
-        if prev == 1 and now == 0:   # falling edge = a "press"
-            count += 1
-            print("press", count)
-        prev = now
-        await asyncio.sleep(0)       # yield, then look again IMMEDIATELY
-
-asyncio.run(count_presses())
+prev = 1
+while True:
+    now = btnA.value()
+    if prev == 1 and now == 0:   # falling edge = a "press"
+        count += 1
+        print("press", count)
+    prev = now                   # no sleep -- sample flat-out
 ```
 
 > [!TIP]
-> **Do this:** Press Button A exactly 10 times, counting out loud. On most switches the printed count overshoots — every extra count is one physical press registering as several electrical ones. Slow, soft presses and lazy releases bounce the most, so try a few styles. *(Getting a clean 10-for-10 every time? Your switch may genuinely settle too fast for polling to catch — see the interrupt counter below before concluding it doesn't bounce.)*
->
-> **Now fix it with one line:** add `await asyncio.sleep(0.15)` directly under the `print(...)` line and run it again. Ten presses, count of ten. That single line ignores the pin for 150 ms after each detected press — longer than any bounce burst, shorter than any intentional second press.
+> **Do this:** Press Button A exactly 10 times, counting out loud. On most switches the printed count overshoots — every extra count is one physical press registering as several electrical ones. Slow, soft presses and lazy releases bounce the most, so try a few styles. *(Getting a clean 10-for-10 every time? Your switch may genuinely settle too fast to catch — see the interrupt counter below before concluding it doesn't bounce.)*
+
+Now the same counter with **one added line** — go deaf for a moment after each detected press:
+
+```python
+from machine import Pin
+import time
+
+btnA = Pin(18, Pin.IN, Pin.PULL_UP)
+
+count = 0
+prev = 1
+while True:
+    now = btnA.value()
+    if prev == 1 and now == 0:
+        count += 1
+        print("press", count)
+        time.sleep(0.15)         # debounce: ignore the pin while it settles
+    prev = now
+```
+
+Ten presses, count of ten. The 150 ms of deafness is longer than any bounce burst but shorter than any intentional second press — that's software debouncing in its simplest form. And it's exactly the role `await asyncio.sleep(0.15)` plays in B2's button coroutine: same 150 ms, but the non-blocking flavor, because *there* the LEDs and other tasks must keep running while the pin settles. Blocking is fine in a single-job test rig; in a real program you use the `await` version — which is the whole story of this session in one line of code.
 
 <details>
 <summary><strong>Counts still clean? Bring out the instrument-grade counter</strong></summary>
 
-Polling — even flat-out — takes snapshots, and MicroPython manages a look every few hundred microseconds at best. A **hardware interrupt** removes the sampling limit: the chip itself calls your function on every falling edge it detects, no polling involved.
+Polling — even flat-out — takes snapshots: the tight loop above manages a look every few tens of microseconds, and chatter can slip between two looks. A **hardware interrupt** removes the sampling limit entirely: the chip itself calls your function on every falling edge it detects, no polling involved.
 
 ```python
 from machine import Pin
@@ -167,6 +180,8 @@ while True:
 
 Press 10 times again. If even *this* counts 10, congratulations — your particular switch really is that clean (they vary a lot between models and even between units). The bounce problem is still real for the switch next to yours, and interrupts get their own proper treatment in a later session.
 
+**Guaranteed bounce, on any hardware:** unplug the Button A jumper from the button and gently *scratch its free end along the GND rail*. A scraping wire is a worn-out switch amplified — it chatters for tens of milliseconds, and the count explodes (this shows up even in the polling counter). That scratching wire is what debouncing defends against: every real switch drifts toward it as its contacts age and oxidize. A clean switch today is not a clean switch in year three of your product's life.
+
 </details>
 
 > [!NOTE]
@@ -178,7 +193,7 @@ Press 10 times again. If even *this* counts 10, congratulations — your particu
 
 What you just saw is why B2's button coroutine sleeps for 0.15 s after each press — and why the reaction-game assignment's rubric has a "no double-triggers" row. Debouncing isn't optional polish; an undebounced button in the game would register one press as several and instantly decide rounds twice.
 
-> There's also a *hardware* way to debounce — smoothing the bounce out with a capacitor before the pin ever sees it — explored in the optional [Part D](05-part-d-hardware-debounce.md). It reuses this exact counter, so you've already met the test rig.
+> There's also a *hardware* way to debounce — smoothing the bounce out with a capacitor before the pin ever sees it — explored in the optional [Part D](05-part-d-hardware-debounce.md). Its test rig is a two-button `uasyncio` version of this same counter, so you've already met the idea.
 
 ---
 

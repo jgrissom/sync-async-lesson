@@ -30,13 +30,17 @@ it. Every design choice serves that:
   line is explained — same show-then-fix move as Part A's broken button. B3's
   counter is deliberately the same rig as Part D's `debounce_test.py`, so the
   optional hardware segment starts on familiar code.
-- **Bounce-counter rigs must poll with `await asyncio.sleep(0)`** (yield, no
-  wait), never `sleep(0.001)`: bounce bursts are often sub-millisecond, and a
-  1 ms nap sleeps through the whole burst — the rig accidentally debounces
-  what it's demonstrating. Found the hard way on a real bench (clean 10-for-10
-  counts). B3 keeps an IRQ edge-counter in a collapsible as the
-  instrument-grade fallback for genuinely fast-settling switches. Bench
-  gotcha: a Part D cap left across Button A also makes B3 count clean.
+- **Bounce-counter rigs must sample as fast as possible.** Bounce bursts are
+  often sub-millisecond; a rig that naps even 1 ms between looks sleeps
+  through the burst and accidentally debounces what it's demonstrating —
+  found the hard way on a real bench (clean 10-for-10 counts). B3 therefore
+  uses a plain synchronous `while True` with **no sleep at all** (deliberately
+  not async — blocking is fine when watching one pin is the only job, and
+  that framing feeds the lesson). Part D's two-button rig stays `uasyncio`
+  (two concurrent counters justify it) but polls with `await asyncio.sleep(0)`
+  — yield, never wait. B3 keeps an IRQ edge-counter in a collapsible as the
+  instrument-grade fallback for fast-settling switches. Bench gotcha: a
+  Part D cap left across Button A also makes B3 count clean.
 
 ## 2. Pin assignments — and why these exact pins
 
