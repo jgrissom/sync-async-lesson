@@ -21,6 +21,7 @@ from micropython_dotstar import DotStar
 import random
 
 # --- Hardware setup ---
+led1 = Pin(26, Pin.OUT)   # red LED = wait beacon
 led2 = Pin(27, Pin.OUT)   # green LED = GO indicator
 buzzer = Pin(25, Pin.OUT)
 btnA = Pin(18, Pin.IN, Pin.PULL_UP)
@@ -49,12 +50,30 @@ async def buzz(times, dur=0.1):
         await asyncio.sleep(dur)
 
 
+async def wait_beacon():
+    """Blink the red LED and DotStar together during the wait phase.
+    Provided for you -- notice how it uses the shared state to know
+    when the round is 'ours' and keeps its hands off otherwise
+    (same move as the `flashing` flag in Part C)."""
+    while True:
+        if not state["go"] and not state["over"]:      # wait phase
+            led1.on()
+            ds[0] = (255, 0, 0)
+            await asyncio.sleep(0.25)
+            if not state["go"] and not state["over"]:  # still waiting?
+                led1.off()
+                ds[0] = (0, 0, 0)
+                await asyncio.sleep(0.25)
+        else:                                          # GO shown or round over
+            led1.off()
+            await asyncio.sleep(0.01)
+
+
 async def referee():
     """Runs the round: wait, show GO, then reset after a result."""
     while True:
-        # Reset round
+        # Reset round -- wait_beacon() takes over the red blinking
         state.update(go=False, over=False, winner=None, false_start=False)
-        ds[0] = (255, 0, 0)   # red = wait
         led2.off()
 
         # ------------------------------------------------------------
@@ -69,6 +88,7 @@ async def referee():
         if not state["over"]:
             state["go"] = True
             ds[0] = (0, 255, 0)   # green = GO!
+            led1.off()            # kill the wait blink instantly
             led2.on()
 
         # Wait for a player coroutine to end the round
@@ -109,6 +129,7 @@ async def player(btn, name, color):
 
 
 async def main():
+    asyncio.create_task(wait_beacon())
     asyncio.create_task(referee())
     asyncio.create_task(player(btnA, "Blue", (0, 0, 255)))       # blue cap
     asyncio.create_task(player(btnB, "Yellow", (255, 255, 0)))   # yellow cap
@@ -116,4 +137,12 @@ async def main():
         await asyncio.sleep(1)
 
 
-asyncio.run(main())
+# The finally-block runs even when you stop the program (Ctrl+C /
+# Ctrl+F2 in Thonny), so the board never gets stuck with the DotStar
+# or an LED left on.
+try:
+    asyncio.run(main())
+finally:
+    TinyPICO.set_dotstar_power(False)
+    led1.off()
+    led2.off()

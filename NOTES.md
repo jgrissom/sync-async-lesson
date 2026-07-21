@@ -145,8 +145,15 @@ reassigned to an output or to anything that sits low at boot.
   invent an async architecture from scratch.
 - Rubric weights concurrency correctness (25 pts) highest, on purpose.
 - **The GO indicator is LED 2 (green, GPIO 27)**, so the physical LED color
-  matches the DotStar turning green (red = wait, green = go). LED 1 (red) is
-  reserved for the stretch goal ("wait" light / PWM pulsing).
+  matches the DotStar turning green (red = wait, green = go). **LED 1 (red)
+  is the wait beacon**: a provided `wait_beacon()` task blinks it and the
+  DotStar red together during the wait phase. The blink is deliberate, not
+  decoration — it requires a live task during the referee's random sleep
+  (visible proof of concurrency), it reuses C2C's shared-state coordination
+  move, and it disambiguates the wait phase (blinking red, silent) from a
+  false-start loss (solid red + double buzz). The beacon is *given* in the
+  scaffold so the student TODO count stays at three. Stretch goal: PWM pulse
+  instead of on/off blink.
 - **Color semantics are load-bearing: red = wait/lose, green = GO — reserved
   for game state only.** Button caps are therefore blue (A) and yellow (B),
   and players are named after their cap ("Player Blue"/"Player Yellow") with

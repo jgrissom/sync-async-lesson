@@ -10,8 +10,8 @@ Build a two-player reaction game that ties everything together. Work individuall
 
 ## How the game works
 
-1. On start, the DotStar shows **red** and both LEDs are off. Players wait.
-2. After a **random delay of 2–5 seconds**, the DotStar turns **green** and LED 2 (the green LED) lights — this is the "GO" signal.
+1. On start, the DotStar and the **red LED blink red together** — the wait phase. Players hover, fingers ready.
+2. After a **random delay of 2–5 seconds**, the blinking stops: the DotStar turns **solid green** and LED 2 (the green LED) lights — this is the "GO" signal.
 3. The **first player to press** their button after GO wins: sound the buzzer and flash the DotStar the winner's **cap color** — Player Blue's button has the blue cap, Player Yellow's the yellow cap, and the DotStar flashes that exact color. (Red and green are deliberately reserved: red always means *wait/lose*, green always means *GO*.)
 4. If a player presses **before** the green GO signal (a **false start**), they lose immediately — flash the DotStar red and buzz twice.
 5. After a result, wait 3 seconds, then reset for another round automatically.
@@ -40,6 +40,7 @@ import tinypico as TinyPICO
 from micropython_dotstar import DotStar
 import random
 
+led1 = Pin(26, Pin.OUT)   # red LED = wait beacon
 led2 = Pin(27, Pin.OUT)   # green LED = GO indicator
 buzzer = Pin(25, Pin.OUT)
 btnA = Pin(18, Pin.IN, Pin.PULL_UP)
@@ -59,11 +60,24 @@ async def buzz(times, dur=0.1):
         buzzer.on(); await asyncio.sleep(dur)
         buzzer.off(); await asyncio.sleep(dur)
 
+async def wait_beacon():
+    # Provided: blinks red LED + DotStar during the wait phase,
+    # hands-off otherwise (same shared-state move as Part C's flag)
+    while True:
+        if not state["go"] and not state["over"]:      # wait phase
+            led1.on();  ds[0] = (255, 0, 0)
+            await asyncio.sleep(0.25)
+            if not state["go"] and not state["over"]:  # still waiting?
+                led1.off();  ds[0] = (0, 0, 0)
+                await asyncio.sleep(0.25)
+        else:
+            led1.off()
+            await asyncio.sleep(0.01)
+
 async def referee():
     while True:
-        # Reset round
+        # Reset round -- wait_beacon() takes over the red blinking
         state.update(go=False, over=False, winner=None, false_start=False)
-        ds[0] = (255, 0, 0)   # red = wait
         led2.off()
 
         # TODO 1: wait a RANDOM 2-5 seconds before GO
@@ -72,6 +86,7 @@ async def referee():
         if not state["over"]:            # nobody false-started
             state["go"] = True
             ds[0] = (0, 255, 0)          # green = GO!
+            led1.off()                   # kill the wait blink instantly
             led2.on()
 
         # Wait for the round to finish, then pause before next round
@@ -88,18 +103,25 @@ async def player(btn, name, color):
         await asyncio.sleep(0.01)
 
 async def main():
+    asyncio.create_task(wait_beacon())
     asyncio.create_task(referee())
     asyncio.create_task(player(btnA, "Blue", (0, 0, 255)))       # blue cap
     asyncio.create_task(player(btnB, "Yellow", (255, 255, 0)))   # yellow cap
     while True:
         await asyncio.sleep(1)
 
-asyncio.run(main())
+# Cleanup runs even when you stop the program (Ctrl+C / Ctrl+F2)
+try:
+    asyncio.run(main())
+finally:
+    TinyPICO.set_dotstar_power(False)
+    led1.off()
+    led2.off()
 ```
 
 ## Stretch goals (extra credit)
 
-- Add LED 1 (red) as a "wait" light that mirrors the red phase (on while waiting, off at GO), and make both LEDs pulse via PWM instead of on/off.
+- Make the wait beacon *pulse* smoothly via PWM instead of blinking on/off (and dim the GO LED to a comfortable brightness while you're at it).
 - Track and print a running best reaction time using `time.ticks_ms()` / `time.ticks_diff()`.
 - Best-of-three match: first player to win 2 rounds gets a victory animation on the DotStar.
 
