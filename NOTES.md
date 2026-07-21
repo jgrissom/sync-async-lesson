@@ -25,6 +25,12 @@ it. Every design choice serves that:
 - Everything hinges on the contrast `time.sleep()` (blocks the CPU) vs.
   `await asyncio.sleep()` (yields to the scheduler). Keep that contrast pure:
   **no `time.sleep()` may appear in any async example**, even for tiny delays.
+- **Programs are built in stages, each with its own test.** B1A→B1B adds one
+  concept per step; C2A→C2B→C2C grows the rainbow program one task-group at a
+  time, testing between stages (a broken stage implicates only the code just
+  added); the wiring test checks components one at a time. C2C ends with
+  deliberate sabotage (swap one `await asyncio.sleep` for `time.sleep`) so
+  students *cause* the stutter rather than being told about it.
 - **Problems are demonstrated before they're solved.** B3 makes switch bounce
   visible (undebounced counter over-counts 10 presses) *before* the debounce
   line is explained — same show-then-fix move as Part A's broken button. B3's

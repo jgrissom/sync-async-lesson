@@ -48,19 +48,17 @@ ds[0] = (255, 0, 0)    # red   (R, G, B)
 
 ## C2 — DotStar as a concurrent rainbow heartbeat
 
-Here the DotStar becomes a third output task, smoothly cycling colors while LEDs blink and buttons stay responsive. Pressing a button flashes it white.
+Here the DotStar becomes another concurrent task: smoothly cycling colors while LEDs blink and buttons stay responsive. Build it in three stages, **testing after each one** — if a stage breaks, the fault is in the code you just added.
+
+### C2A — the rainbow, alone
+
+Start a fresh file with the DotStar setup from C1, plus two new pieces: `wheel()`, which converts a position on a 0–254 color wheel into an (R, G, B) tuple, and a `rainbow()` coroutine that nudges along that wheel 50 times a second.
 
 ```python
 from machine import Pin, SoftSPI
 import uasyncio as asyncio
 import tinypico as TinyPICO
 from micropython_dotstar import DotStar
-
-led1 = Pin(26, Pin.OUT)
-led2 = Pin(27, Pin.OUT)
-buzzer = Pin(25, Pin.OUT)
-btnA = Pin(18, Pin.IN, Pin.PULL_UP)
-btnB = Pin(5, Pin.IN, Pin.PULL_UP)
 
 spi = SoftSPI(sck=Pin(TinyPICO.DOTSTAR_CLK),
               mosi=Pin(TinyPICO.DOTSTAR_DATA),
@@ -79,18 +77,59 @@ def wheel(pos):
         pos -= 170
         return (pos * 3, 0, 255 - pos * 3)
 
-async def blink(led, rate):
-    while True:
-        led.value(not led.value())
-        await asyncio.sleep(rate)
-
 async def rainbow():
     pos = 0
     while True:
         ds[0] = wheel(pos)
         pos = (pos + 2) % 255
-        await asyncio.sleep(0.02)   # smooth = ~50 fps
+        await asyncio.sleep(0.02)   # 50 updates/sec = smooth glide
 
+asyncio.run(rainbow())
+```
+
+> [!TIP]
+> **Test:** the DotStar should glide seamlessly through the spectrum — no steps, no flicker. Memorize how *smooth* looks; that smoothness is about to become your instrument.
+
+### C2B — add the blinking LEDs
+
+Three additions to the same file — the LEDs near the top, `blink()` next to `rainbow()`, and a `main()` that schedules all three tasks **replacing** the `asyncio.run(rainbow())` line at the bottom:
+
+```python
+# near the top, with the other setup:
+led1 = Pin(26, Pin.OUT)
+led2 = Pin(27, Pin.OUT)
+
+# alongside rainbow():
+async def blink(led, rate):
+    while True:
+        led.value(not led.value())
+        await asyncio.sleep(rate)
+
+# REPLACE  asyncio.run(rainbow())  at the bottom with:
+async def main():
+    asyncio.create_task(blink(led1, 0.5))
+    asyncio.create_task(blink(led2, 0.9))
+    asyncio.create_task(rainbow())
+    while True:
+        await asyncio.sleep(1)
+
+asyncio.run(main())
+```
+
+> [!TIP]
+> **Test:** both LEDs blink at their own rates *and the rainbow is exactly as smooth as before*. Three tasks, zero interference — stare at the DotStar while the LEDs blink and confirm it never hiccups.
+
+### C2C — add the buttons… then sabotage everything
+
+Last additions: buzzer and buttons near the top, a `watch_button()` coroutine that beeps and flashes the DotStar white on a press, and two more `create_task` lines in `main()`:
+
+```python
+# near the top, with the other setup:
+buzzer = Pin(25, Pin.OUT)
+btnA = Pin(18, Pin.IN, Pin.PULL_UP)
+btnB = Pin(5, Pin.IN, Pin.PULL_UP)
+
+# alongside the other coroutines:
 async def watch_button(btn):
     while True:
         if btn.value() == 0:
@@ -101,20 +140,15 @@ async def watch_button(btn):
             await asyncio.sleep(0.15)
         await asyncio.sleep(0.01)
 
-async def main():
-    asyncio.create_task(blink(led1, 0.5))
-    asyncio.create_task(blink(led2, 0.9))
-    asyncio.create_task(rainbow())
+# two more lines inside main(), with the other create_task calls:
     asyncio.create_task(watch_button(btnA))
     asyncio.create_task(watch_button(btnB))
-    while True:
-        await asyncio.sleep(1)
-
-asyncio.run(main())
 ```
 
-> [!NOTE]
-> **Teaching payoff:** Two LEDs blink at different rates, the DotStar glides through a rainbow, and both buttons respond instantly — all concurrently. If you drop a `time.sleep(1)` into any coroutine, the rainbow stutters visibly. That stutter is the whole lesson in one glance.
+> [!TIP]
+> **Test:** two LEDs blinking at different rates, a gliding rainbow, and both buttons answering instantly with a beep and a white flash — five concurrent tasks from one program. This is everything Part A couldn't do.
+>
+> **Now break it on purpose.** Add `import time` at the top, and in `blink()` change `await asyncio.sleep(rate)` to `time.sleep(rate)`. Run it and watch the DotStar: the glide collapses into a stuttering slideshow, and the buttons go dead — one blocking call in *one* coroutine starves *every* task, because the scheduler never gets control back. Change it back and watch health return. **That stutter is the whole lesson in one glance** — and from now on, a stuttering status animation in any async program tells you something, somewhere, is blocking.
 
 ---
 
