@@ -86,8 +86,10 @@ reassigned to an output or to anything that sits low at boot.
 
 ## 5. Why Part D (hardware debounce) is optional
 
-- The core 210 minutes are already full; Part D is +15 min for groups that
-  finish early, or a warm-up for a later session.
+- The core 210 minutes are already full; Part D is ~25 min for groups that
+  finish early, or a warm-up for a later session. (Originally 15 min; grew
+  when capacitor fundamentals and the τ = R × C walkthrough were added —
+  sections 1–2 are teachable theory, not just a skim.)
 - It requires extra parts (ceramic caps `103`/`104`/`105`) that not every kit
   bench needs for the graded work — nothing in the assignment depends on it.
 - Pedagogically it's a *comparison* experiment (predict → measure → compare

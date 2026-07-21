@@ -1,6 +1,6 @@
 # Part D — Hardware Debounce Experiment (optional)
 
-⏱️ **~15 min bonus** · *not part of the core 3.5 hours*
+⏱️ **~25 min bonus** · *not part of the core 3.5 hours*
 
 [← Part C](04-part-c-dotstar.md) · [Home](../README.md) · **Next:** [Assignment →](../assignment/README.md)
 

@@ -18,7 +18,7 @@ This session teaches the difference between blocking (synchronous) and non-block
 | Break | Stretch | 5 min |
 | Assignment | Reaction-timer game (graded, in-class build) | 50 min |
 | Wrap-up | Demos, review, Q&A | 10 min |
-| *Optional* | *Part D — hardware debounce experiment (if time permits)* | *+15 min* |
+| *Optional* | *Part D — hardware debounce experiment (if time permits)* | *+25 min* |
 
 > [!TIP]
 > Part D is a bonus experiment, **not** part of the core 210 minutes. Run it only if a group finishes the assignment early, or slot it into a future session. It pairs naturally with the software debouncing taught in Part B.
