@@ -16,7 +16,30 @@ MicroPython includes `uasyncio`, a cooperative scheduler. You write independent 
 | `await asyncio.sleep(t)` | Pause **this** coroutine for `t` seconds and let others run. Non-blocking. |
 | `asyncio.create_task(foo())` | Schedule a coroutine to run concurrently with others. |
 
-## B1 — two LEDs, different rates, fully concurrent
+## B1A — one LED, your first coroutine
+
+Start by translating Part A's blink, line for line, into async form. Three mechanical changes: `def` becomes `async def`, `time.sleep()` becomes `await asyncio.sleep()`, and `asyncio.run()` starts it.
+
+```python
+from machine import Pin
+import uasyncio as asyncio
+
+led1 = Pin(26, Pin.OUT)
+
+async def blink(led, rate):
+    while True:
+        led.value(not led.value())   # toggle
+        await asyncio.sleep(rate)    # yield — though nothing else is running... yet
+
+asyncio.run(blink(led1, 0.5))
+```
+
+> [!NOTE]
+> **Run it — and notice it's completely unimpressive.** One LED, blinking, exactly like Part A. With a single coroutine there's nobody to hand control *to*, so all this ceremony buys nothing yet. That's the honest truth about async: one task alone gains nothing. The payoff needs a second task — next.
+
+## B1B — a second LED, a different rate, fully concurrent
+
+Now the one genuinely new idea: `asyncio.create_task()` schedules a coroutine to run *alongside* whatever else is running. Same `blink()` function as B1A — called twice, with different LEDs and rates:
 
 ```python
 from machine import Pin
@@ -40,7 +63,7 @@ asyncio.run(main())
 ```
 
 > [!NOTE]
-> **Observe:** The two LEDs blink at clearly different, independent rates from a single program — something that was awkward to do synchronously. Neither `blink()` blocks the other because each yields at its `await`.
+> **Observe:** The two LEDs blink at clearly different, independent rates from a single program — something that was awkward to do synchronously. Neither `blink()` blocks the other because each yields at its `await`. Try writing this with `time.sleep()` in your head: whose sleep goes first? That's the tangle A2 warned about, dissolved.
 
 ## B2 — add responsive buttons and a buzzer
 
