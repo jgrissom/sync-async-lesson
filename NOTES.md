@@ -25,6 +25,11 @@ it. Every design choice serves that:
 - Everything hinges on the contrast `time.sleep()` (blocks the CPU) vs.
   `await asyncio.sleep()` (yields to the scheduler). Keep that contrast pure:
   **no `time.sleep()` may appear in any async example**, even for tiny delays.
+- **Problems are demonstrated before they're solved.** B3 makes switch bounce
+  visible (undebounced counter over-counts 10 presses) *before* the debounce
+  line is explained — same show-then-fix move as Part A's broken button. B3's
+  counter is deliberately the same rig as Part D's `debounce_test.py`, so the
+  optional hardware segment starts on familiar code.
 
 ## 2. Pin assignments — and why these exact pins
 

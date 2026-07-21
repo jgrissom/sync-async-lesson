@@ -84,11 +84,43 @@ asyncio.run(main())
 > [!TIP]
 > **Do this:** Run it and press either button while both LEDs blink. The buzzer responds immediately every time — contrast this directly with Example A1, where presses were dropped.
 
+## B3 — see the bounce for yourself
+
+B2's button coroutine contains a mysterious `await asyncio.sleep(0.15)` labeled "crude debounce." Before trusting it, let's *see* the problem it solves. Mechanical switches don't close cleanly — the metal contacts physically vibrate for a few milliseconds, producing a burst of rapid on/off transitions called **bounce**. Your code polls fast enough to catch them all.
+
+This counter has **no debounce at all**. It counts every press it detects:
+
+```python
+from machine import Pin
+import uasyncio as asyncio
+
+btnA = Pin(18, Pin.IN, Pin.PULL_UP)
+count = 0
+
+async def count_presses():
+    global count
+    prev = 1
+    while True:
+        now = btnA.value()
+        if prev == 1 and now == 0:   # falling edge = a "press"
+            count += 1
+            print("press", count)
+        prev = now
+        await asyncio.sleep(0.001)   # poll fast enough to catch bounce
+
+asyncio.run(count_presses())
+```
+
+> [!TIP]
+> **Do this:** Press Button A exactly 10 times, counting out loud. Watch the printed count race past you — 13, 17, sometimes 25. Every extra count is one physical press registering as several electrical ones. *(If your button happens to be unusually clean, press slower and softer — a gentle release bounces more.)*
+>
+> **Now fix it with one line:** add `await asyncio.sleep(0.15)` directly under the `print(...)` line and run it again. Ten presses, count of ten. That single line ignores the pin for 150 ms after each detected press — longer than any bounce burst, shorter than any intentional second press.
+
 ## A note on debouncing
 
-Mechanical switches "bounce" — a single press can register as several rapid on/off transitions. The `await asyncio.sleep(0.15)` after a press is a simple debounce: we ignore further changes for 150 ms. Students will need this in the assignment.
+What you just saw is why B2's button coroutine sleeps for 0.15 s after each press — and why the reaction-game assignment's rubric has a "no double-triggers" row. Debouncing isn't optional polish; an undebounced button in the game would register one press as several and instantly decide rounds twice.
 
-> There's also a *hardware* way to debounce, explored in the optional [Part D](05-part-d-hardware-debounce.md).
+> There's also a *hardware* way to debounce — smoothing the bounce out with a capacitor before the pin ever sees it — explored in the optional [Part D](05-part-d-hardware-debounce.md). It reuses this exact counter, so you've already met the test rig.
 
 ---
 
