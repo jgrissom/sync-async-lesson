@@ -1,0 +1,21 @@
+# ------------------------------------------------------------
+# Instructor-only material must NEVER be committed to this
+# public repo. The reaction-game solution and answer key live
+# in the separate instructor bundle.
+# ------------------------------------------------------------
+*SOLUTION*
+*solution*
+*Solution*
+*INSTRUCTOR*
+*instructor*
+*Instructor*
+*answer_key*
+*ANSWER_KEY*
+*answer-key*
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.vscode/

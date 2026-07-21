@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" font-family="Helvetica, Arial, sans-serif">
+  <!-- Print-friendly wiring schematic: white background, dark lines, labels on every net -->
+  <rect x="0" y="0" width="900" height="640" fill="#ffffff"/>
+
+  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#111">
+    Wiring — Sync vs. Async on the TinyPICO
+  </text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#444">
+    Wire with USB unplugged · Buttons use internal pull-ups (read 0 when pressed) · DotStar is onboard, no wiring
+  </text>
+
+  <!-- ==================== TinyPICO board ==================== -->
+  <rect x="60" y="90" width="150" height="440" rx="10" fill="#f2f2f2" stroke="#333" stroke-width="2"/>
+  <!-- USB connector notch -->
+  <rect x="110" y="80" width="50" height="16" rx="3" fill="#d9d9d9" stroke="#333" stroke-width="1.5"/>
+  <text x="135" y="120" text-anchor="middle" font-size="11" fill="#666">USB</text>
+  <text x="135" y="300" text-anchor="middle" font-size="15" font-weight="bold" fill="#111" transform="rotate(-90 135 300)">TinyPICO ESP32</text>
+
+  <!-- Pin stubs on right edge -->
+  <g stroke="#333" stroke-width="2" fill="#333">
+    <rect x="205" y="135" width="12" height="10"/>
+    <rect x="205" y="215" width="12" height="10"/>
+    <rect x="205" y="295" width="12" height="10"/>
+    <rect x="205" y="375" width="12" height="10"/>
+    <rect x="205" y="455" width="12" height="10"/>
+    <rect x="205" y="505" width="12" height="10"/>
+  </g>
+  <g font-size="13" font-weight="bold" fill="#111" text-anchor="end">
+    <text x="198" y="144">GPIO 26</text>
+    <text x="198" y="224">GPIO 27</text>
+    <text x="198" y="304">GPIO 25</text>
+    <text x="198" y="384">GPIO 18</text>
+    <text x="198" y="464">GPIO 5</text>
+    <text x="198" y="514">GND</text>
+  </g>
+
+  <!-- ==================== GND bus ==================== -->
+  <line x1="770" y1="140" x2="770" y2="510" stroke="#333" stroke-width="3"/>
+  <!-- ground symbol -->
+  <g stroke="#333" stroke-width="3" fill="none">
+    <line x1="770" y1="510" x2="770" y2="535"/>
+    <line x1="745" y1="535" x2="795" y2="535"/>
+    <line x1="753" y1="545" x2="787" y2="545"/>
+    <line x1="761" y1="555" x2="779" y2="555"/>
+  </g>
+  <text x="810" y="330" font-size="13" font-weight="bold" fill="#111">GND bus</text>
+  <text x="810" y="348" font-size="11" fill="#555">(breadboard − rail)</text>
+
+  <!-- ==================== Row 1: GPIO26 - 330R - LED1 red - GND ==================== -->
+  <line x1="217" y1="140" x2="300" y2="140" stroke="#333" stroke-width="2"/>
+  <!-- resistor zigzag -->
+  <polyline points="300,140 308,128 322,152 336,128 350,152 364,128 372,140" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="336" y="118" text-anchor="middle" font-size="12" fill="#111">330 Ω</text>
+  <line x1="372" y1="140" x2="470" y2="140" stroke="#333" stroke-width="2"/>
+  <!-- LED symbol: triangle + bar, anode left -->
+  <polygon points="470,124 470,156 498,140" fill="#e0342b" stroke="#333" stroke-width="2"/>
+  <line x1="498" y1="124" x2="498" y2="156" stroke="#333" stroke-width="3"/>
+  <text x="466" y="112" text-anchor="end" font-size="11" fill="#555">anode (long leg)</text>
+  <text x="504" y="112" font-size="11" fill="#555">cathode</text>
+  <line x1="498" y1="140" x2="770" y2="140" stroke="#333" stroke-width="2"/>
+  <text x="600" y="132" font-size="13" font-weight="bold" fill="#111">LED 1 — red</text>
+
+  <!-- ==================== Row 2: GPIO27 - 330R - LED2 green - GND ==================== -->
+  <line x1="217" y1="220" x2="300" y2="220" stroke="#333" stroke-width="2"/>
+  <polyline points="300,220 308,208 322,232 336,208 350,232 364,208 372,220" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="336" y="198" text-anchor="middle" font-size="12" fill="#111">330 Ω</text>
+  <line x1="372" y1="220" x2="470" y2="220" stroke="#333" stroke-width="2"/>
+  <polygon points="470,204 470,236 498,220" fill="#2e9e44" stroke="#333" stroke-width="2"/>
+  <line x1="498" y1="204" x2="498" y2="236" stroke="#333" stroke-width="3"/>
+  <line x1="498" y1="220" x2="770" y2="220" stroke="#333" stroke-width="2"/>
+  <text x="600" y="212" font-size="13" font-weight="bold" fill="#111">LED 2 — green (GO light)</text>
+
+  <!-- ==================== Row 3: GPIO25 - buzzer - GND ==================== -->
+  <line x1="217" y1="300" x2="470" y2="300" stroke="#333" stroke-width="2"/>
+  <circle cx="500" cy="300" r="30" fill="#fafafa" stroke="#333" stroke-width="2"/>
+  <text x="500" y="306" text-anchor="middle" font-size="13" font-weight="bold" fill="#111">BZ</text>
+  <text x="462" y="284" text-anchor="end" font-size="13" font-weight="bold" fill="#111">+</text>
+  <text x="540" y="284" font-size="13" font-weight="bold" fill="#111">−</text>
+  <line x1="530" y1="300" x2="770" y2="300" stroke="#333" stroke-width="2"/>
+  <text x="600" y="292" font-size="13" font-weight="bold" fill="#111">Buzzer</text>
+  <text x="600" y="322" font-size="11" fill="#555">+ leg → GPIO 25, − leg → GND</text>
+
+  <!-- ==================== Row 4: GPIO18 - Button A - GND ==================== -->
+  <line x1="217" y1="380" x2="480" y2="380" stroke="#333" stroke-width="2"/>
+  <circle cx="486" cy="380" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+  <line x1="490" y1="376" x2="536" y2="358" stroke="#333" stroke-width="2"/>
+  <circle cx="540" cy="380" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+  <circle cx="513" cy="352" r="9" fill="#e0342b" stroke="#333" stroke-width="1.5"/>
+  <line x1="545" y1="380" x2="770" y2="380" stroke="#333" stroke-width="2"/>
+  <text x="600" y="372" font-size="13" font-weight="bold" fill="#111">Button A — red cap</text>
+  <text x="600" y="402" font-size="11" fill="#555">one leg → GPIO 18, other → GND</text>
+
+  <!-- ==================== Row 5: GPIO5 - Button B - GND ==================== -->
+  <line x1="217" y1="460" x2="480" y2="460" stroke="#333" stroke-width="2"/>
+  <circle cx="486" cy="460" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+  <line x1="490" y1="456" x2="536" y2="438" stroke="#333" stroke-width="2"/>
+  <circle cx="540" cy="460" r="5" fill="#fff" stroke="#333" stroke-width="2"/>
+  <circle cx="513" cy="432" r="9" fill="#2e9e44" stroke="#333" stroke-width="1.5"/>
+  <line x1="545" y1="460" x2="770" y2="460" stroke="#333" stroke-width="2"/>
+  <text x="600" y="452" font-size="13" font-weight="bold" fill="#111">Button B — green cap</text>
+  <text x="600" y="482" font-size="11" fill="#555">one leg → GPIO 5, other → GND</text>
+
+  <!-- ==================== GND pin to bus ==================== -->
+  <line x1="217" y1="510" x2="770" y2="510" stroke="#333" stroke-width="2"/>
+  <text x="490" y="502" font-size="11" fill="#555">TinyPICO GND → breadboard − rail</text>
+
+  <!-- ==================== Footer notes ==================== -->
+  <text x="60" y="590" font-size="12" fill="#333">
+    Part D (optional): add one ceramic cap (103 / 104 / 105) across Button A — same rows as the GPIO 18 leg and GND. Non-polarised: either way round.
+  </text>
+  <text x="60" y="612" font-size="12" fill="#333">
+    LED check: long leg (anode) goes to the resistor / GPIO side, short leg to GND.
+  </text>
+</svg>
