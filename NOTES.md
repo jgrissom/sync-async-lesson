@@ -59,8 +59,8 @@ it. Every design choice serves that:
 | LED 1 (red) | 26 | Free general-purpose output on the TinyPICO header; no boot-time role. |
 | LED 2 (green) | 27 | Same. |
 | Buzzer | 25 | Same; also DAC-capable (25/26), leaving the door open for tone/PWM work in a later session. |
-| Button A (red cap) | 18 | Plain GPIO, safe for input with pull-up. |
-| Button B (green cap) | 5 | Safe **with a caveat — see below**. |
+| Button A (blue cap) | 18 | Plain GPIO, safe for input with pull-up. |
+| Button B (yellow cap) | 5 | Safe **with a caveat — see below**. |
 | DotStar | onboard | Never hardcode its pins; use `TinyPICO.DOTSTAR_CLK` / `DOTSTAR_DATA` constants so the library owns them. |
 
 Pins deliberately **avoided**:
@@ -147,6 +147,12 @@ reassigned to an output or to anything that sits low at boot.
 - **The GO indicator is LED 2 (green, GPIO 27)**, so the physical LED color
   matches the DotStar turning green (red = wait, green = go). LED 1 (red) is
   reserved for the stretch goal ("wait" light / PWM pulsing).
+- **Color semantics are load-bearing: red = wait/lose, green = GO — reserved
+  for game state only.** Button caps are therefore blue (A) and yellow (B),
+  and players are named after their cap ("Player Blue"/"Player Yellow") with
+  the DotStar flashing the winner's exact cap color. Don't give a player a
+  red or green cap: a red-cap winner flash would be indistinguishable from
+  the false-start loss flash, and green would read as GO.
 - **Race-condition subtlety that the design accepts:** two "simultaneous"
   presses are serialized by the cooperative scheduler, so whoever's coroutine
   checks `state["over"]` first wins — that's fine, and can even be a

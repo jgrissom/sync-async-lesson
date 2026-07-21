@@ -16,8 +16,8 @@
 | LED 1 (red) | GPIO 26 | GPIO 26 → anode; cathode → 330 Ω → GND |
 | LED 2 (green) | GPIO 27 | GPIO 27 → anode; cathode → 330 Ω → GND |
 | Buzzer | GPIO 25 | + leg → GPIO 25; – leg → GND |
-| Button A (red cap) | GPIO 18 | One leg → GPIO 18; opposite leg → GND |
-| Button B (green cap) | GPIO 5 | One leg → GPIO 5; opposite leg → GND |
+| Button A (blue cap) | GPIO 18 | One leg → GPIO 18; opposite leg → GND |
+| Button B (yellow cap) | GPIO 5 | One leg → GPIO 5; opposite leg → GND |
 | DotStar | onboard | No wiring — built into the TinyPICO |
 
 > [!NOTE]
@@ -79,8 +79,8 @@ for _ in range(2):
     buzzer.on(); time.sleep(0.15)
     buzzer.off(); time.sleep(0.25)
 
-wait_press(btnA, "Button A (red cap, GPIO 18)")
-wait_press(btnB, "Button B (green cap, GPIO 5)")
+wait_press(btnA, "Button A (blue cap, GPIO 18)")
+wait_press(btnB, "Button B (yellow cap, GPIO 5)")
 
 print()
 print("All wiring checks passed! Your breadboard is ready.")

@@ -9,8 +9,8 @@
 #   LED 1 (red)   -> GPIO 26 (+ 330 ohm resistor to GND)
 #   LED 2 (green) -> GPIO 27 (+ 330 ohm resistor to GND)
 #   Buzzer        -> GPIO 25
-#   Button A (red cap)   -> GPIO 18  (other leg to GND)
-#   Button B (green cap) -> GPIO 5   (other leg to GND)
+#   Button A (blue cap)   -> GPIO 18  (other leg to GND)
+#   Button B (yellow cap) -> GPIO 5   (other leg to GND)
 #   DotStar   -> onboard (no wiring)
 # ============================================================
 
@@ -110,8 +110,8 @@ async def player(btn, name, color):
 
 async def main():
     asyncio.create_task(referee())
-    asyncio.create_task(player(btnA, "A", (0, 0, 255)))     # blue
-    asyncio.create_task(player(btnB, "B", (255, 0, 255)))   # magenta
+    asyncio.create_task(player(btnA, "Blue", (0, 0, 255)))       # blue cap
+    asyncio.create_task(player(btnB, "Yellow", (255, 255, 0)))   # yellow cap
     while True:
         await asyncio.sleep(1)
 

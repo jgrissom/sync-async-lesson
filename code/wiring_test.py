@@ -63,8 +63,8 @@ for _ in range(2):
     buzzer.off()
     time.sleep(0.25)
 
-wait_press(btnA, "Button A (red cap, GPIO 18)")
-wait_press(btnB, "Button B (green cap, GPIO 5)")
+wait_press(btnA, "Button A (blue cap, GPIO 18)")
+wait_press(btnB, "Button B (yellow cap, GPIO 5)")
 
 print()
 print("All wiring checks passed! Your breadboard is ready.")

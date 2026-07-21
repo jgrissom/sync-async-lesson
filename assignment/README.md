@@ -12,7 +12,7 @@ Build a two-player reaction game that ties everything together. Work individuall
 
 1. On start, the DotStar shows **red** and both LEDs are off. Players wait.
 2. After a **random delay of 2–5 seconds**, the DotStar turns **green** and LED 2 (the green LED) lights — this is the "GO" signal.
-3. The **first player to press** their button (A or B) after GO wins: sound the buzzer and flash the DotStar their color (e.g., Player A = blue, Player B = magenta).
+3. The **first player to press** their button after GO wins: sound the buzzer and flash the DotStar the winner's **cap color** — Player Blue's button has the blue cap, Player Yellow's the yellow cap, and the DotStar flashes that exact color. (Red and green are deliberately reserved: red always means *wait/lose*, green always means *GO*.)
 4. If a player presses **before** the green GO signal (a **false start**), they lose immediately — flash the DotStar red and buzz twice.
 5. After a result, wait 3 seconds, then reset for another round automatically.
 
@@ -89,8 +89,8 @@ async def player(btn, name, color):
 
 async def main():
     asyncio.create_task(referee())
-    asyncio.create_task(player(btnA, "A", (0, 0, 255)))     # blue
-    asyncio.create_task(player(btnB, "B", (255, 0, 255)))   # magenta
+    asyncio.create_task(player(btnA, "Blue", (0, 0, 255)))       # blue cap
+    asyncio.create_task(player(btnB, "Yellow", (255, 255, 0)))   # yellow cap
     while True:
         await asyncio.sleep(1)
 
