@@ -30,7 +30,11 @@ it. Every design choice serves that:
   time, testing between stages (a broken stage implicates only the code just
   added); the wiring test checks components one at a time. C2C ends with
   deliberate sabotage (swap one `await asyncio.sleep` for `time.sleep`) so
-  students *cause* the stutter rather than being told about it.
+  students *cause* the stutter rather than being told about it. C2C's
+  `flashing` flag is a deliberate first exposure to shared state between
+  tasks — without it the rainbow (repainting every 20 ms) overwrites the
+  white press-flash within one frame. Keep the flag; it foreshadows the
+  assignment's shared `state` dict.
 - **Problems are demonstrated before they're solved.** B3 makes switch bounce
   visible (undebounced counter over-counts 10 presses) *before* the debounce
   line is explained — same show-then-fix move as Part A's broken button. B3's

@@ -121,22 +121,37 @@ asyncio.run(main())
 
 ### C2C — add the buttons… then sabotage everything
 
-Last additions: buzzer and buttons near the top, a `watch_button()` coroutine that beeps and flashes the DotStar white on a press, and two more `create_task` lines in `main()`:
+Last additions: buzzer and buttons, and a `watch_button()` coroutine that beeps and flashes the DotStar white on a press. But there's a wrinkle worth understanding *before* you type it.
+
+**Two tasks now want the same pixel.** If `watch_button()` simply wrote white to `ds[0]`, you'd barely see it: `rainbow()` repaints that pixel every 20 ms, so the white would survive for at most one frame before the rainbow overwrote it. When concurrent tasks share a resource, they have to *coordinate* — here, with a shared `flashing` flag that the rainbow checks before painting. (Remember this move: the reaction-game assignment is built entirely on tasks coordinating through shared state.)
 
 ```python
 # near the top, with the other setup:
 buzzer = Pin(25, Pin.OUT)
 btnA = Pin(18, Pin.IN, Pin.PULL_UP)
 btnB = Pin(5, Pin.IN, Pin.PULL_UP)
+flashing = False   # True while a button flash owns the DotStar
+
+# ONE CHANGE inside rainbow(): paint only when no flash is active
+async def rainbow():
+    pos = 0
+    while True:
+        if not flashing:
+            ds[0] = wheel(pos)
+            pos = (pos + 2) % 255
+        await asyncio.sleep(0.02)
 
 # alongside the other coroutines:
 async def watch_button(btn):
+    global flashing
     while True:
         if btn.value() == 0:
+            flashing = True
             buzzer.on()
-            ds[0] = (255, 255, 255)  # flash white on press
+            ds[0] = (255, 255, 255)   # flash white on press
             await asyncio.sleep(0.15)
             buzzer.off()
+            flashing = False
             await asyncio.sleep(0.15)
         await asyncio.sleep(0.01)
 
