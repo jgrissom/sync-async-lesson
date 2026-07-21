@@ -2,7 +2,7 @@
 
 ⏱️ **50 min** · 🎯 **Graded — 100 points**
 
-[← Part D](../lessons/05-part-d-hardware-debounce.md) · [Home](../README.md)
+[← Part E](../lessons/06-part-e-robust-debounce.md) · [Home](../README.md)
 
 ---
 
@@ -111,4 +111,4 @@ asyncio.run(main())
 
 ---
 
-[← Part D](../lessons/05-part-d-hardware-debounce.md) · [Home](../README.md)
+[← Part E](../lessons/06-part-e-robust-debounce.md) · [Home](../README.md)

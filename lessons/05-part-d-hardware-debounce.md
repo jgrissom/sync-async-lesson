@@ -2,7 +2,7 @@
 
 ⏱️ **~25 min bonus** · *not part of the core 3.5 hours*
 
-[← Part C](04-part-c-dotstar.md) · [Home](../README.md) · **Next:** [Assignment →](../assignment/README.md)
+[← Part C](04-part-c-dotstar.md) · [Home](../README.md) · **Next:** [Part E — Robust Debounce →](06-part-e-robust-debounce.md)
 
 ---
 
@@ -135,14 +135,47 @@ asyncio.run(main())
 
 ## 8. Discussion — hardware vs. software debounce
 
-- Which cap felt best? Did it match your prediction?
-- Why might `105` make presses feel laggy even though it "debounces" well? *(Its ~45 ms time constant starts delaying the real signal.)*
-- When would you choose hardware debounce over software? *(Hardware frees the CPU from polling and works even before your code runs; software is free, tunable, and needs no extra parts. Real designs often use **both**.)*
-- How does this RC filter relate to the async software debounce from Part B — what is each one actually "ignoring"?
+Talk these through before opening the answers.
+
+**Q1. Which cap felt best? Did it match your prediction?**
+
+<details>
+<summary>Answer</summary>
+
+Most benches land on the `104` (100 nF): its τ ≈ 4.5 ms sits comfortably between bounce (too fast to survive it) and human perception (too slow to notice it). But there's no wrong answer here — the point of the experiment is comparing your prediction against a measurement, and a bench that predicted `105` and then *felt* the lag learned the most.
+
+</details>
+
+**Q2. Why might `105` make presses feel laggy even though it "debounces" well?**
+
+<details>
+<summary>Answer</summary>
+
+Its τ ≈ 45 ms is big enough to start delaying the *real* signal, not just the bounce. The filter can't tell a genuine edge from chatter — it slows everything down equally, and at ~45 ms the delay crosses into territory humans can feel. Filtering strength and responsiveness are the same knob turned in opposite directions.
+
+</details>
+
+**Q3. When would you choose hardware debounce over software?**
+
+<details>
+<summary>Answer</summary>
+
+Hardware frees the CPU from polling and works even before your code runs (or if it crashes); software is free, instantly tunable, and needs no extra parts. Real designs often use **both** — a small cap to take the edge off, software for correctness.
+
+</details>
+
+**Q4. How does this RC filter relate to the async software debounce from Part B — what is each one actually "ignoring"?**
+
+<details>
+<summary>Answer</summary>
+
+The RC filter ignores *fast voltage transitions* — spikes too brief to move the capacitor's charge. The `await asyncio.sleep(0.15)` ignores *state changes for a fixed time* after a detected press. Both make the same bet: bounce is much shorter than the window, real presses are much longer. One averages in analog before the pin sees anything; the other averages in code after it does. (The optional [Part E](06-part-e-robust-debounce.md) adds a third variant: ignore state changes until the pin *proves it's stable*.)
+
+</details>
 
 > [!NOTE]
 > **Materials note:** Each group needs one each of `103`, `104`, and `105` caps. With 10 of each value in a standard kit and students working in pairs (~7 groups), that's comfortably enough. If working solo (13 students), have groups share the `105`s since only one is needed at a time per bench.
 
 ---
 
-[← Part C](04-part-c-dotstar.md) · [Home](../README.md) · **Next:** [Assignment →](../assignment/README.md)
+[← Part C](04-part-c-dotstar.md) · [Home](../README.md) · **Next:** [Part E — Robust Debounce →](06-part-e-robust-debounce.md)

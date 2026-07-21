@@ -69,8 +69,25 @@ This works — but notice you had to **rewrite sleep itself**. Now imagine two L
 
 ## Discussion (5 min)
 
-- What is the longest a button press could be ignored in Example A1? *(Answer: up to ~2 seconds.)*
-- Why does `responsive_sleep()` reduce the problem but not eliminate the underlying awkwardness?
+Talk these through before opening the answers.
+
+**Q1. What is the longest a button press could be ignored in Example A1?**
+
+<details>
+<summary>Answer</summary>
+
+Just under ~2.2 seconds. The button is sampled exactly once per trip around the loop, and a full trip is two `time.sleep(1)` calls — plus, if the previous press *was* caught, another 0.2 s of buzzer sleep. Press a millisecond after the check and your press waits for all of it.
+
+</details>
+
+**Q2. Why does `responsive_sleep()` reduce the problem but not eliminate the underlying awkwardness?**
+
+<details>
+<summary>Answer</summary>
+
+It shrinks the deaf window from ~2 s to 20 ms, but the *structure* is wrong: the button logic is now welded inside a sleep function. Every new input or output multiplies the hand-rolled polling (two LEDs at different rates + two buttons + a buzzer would tangle immediately), and the LED timing drifts as the logic inside the loop grows. `responsive_sleep()` is a scheduler, reimplemented badly — Part B replaces it with a real one.
+
+</details>
 
 ---
 

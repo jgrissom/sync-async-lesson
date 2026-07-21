@@ -89,7 +89,7 @@ reassigned to an output or to anything that sits low at boot.
 - The SoftSPI constructor needs a `miso` pin even though the DotStar never
   uses MISO — that's why `TinyPICO.SPI_MISO` appears; it's not a mistake.
 
-## 5. Why Part D (hardware debounce) is optional
+## 5. Why Parts D and E are optional
 
 - The core 210 minutes are already full; Part D is ~25 min for groups that
   finish early, or a warm-up for a later session. (Originally 15 min; grew
@@ -105,6 +105,12 @@ reassigned to an output or to anything that sits low at boot.
 - Ceramic caps were chosen partly because they're non-polarised and safe at
   3.3 V; the polarised-electrolytic / flyback-diode discussion is explicitly
   deferred to a future (motor) session.
+- **Part E (robust software debounce, ~10 min)** implements the stability-
+  counter algorithm that B3's release-bounce note only describes (re-arm after
+  N consecutive released reads). Kept out of Part B to protect the sync-vs-
+  async spine — a second debounce algorithm mid-lesson dilutes the core arc.
+  Its "which debounce, when" table (time-based / stability-based / hardware)
+  is the intended capstone summary if both bonus parts get taught.
 
 ## 6. Assignment decisions
 
@@ -143,6 +149,10 @@ reassigned to an output or to anything that sits low at boot.
   real rule is: solution files are never created inside this folder at all.
 - Lesson pages carry back/next navigation links; keep them consistent when
   inserting or renaming pages.
+- Discussion questions carry collapsible `<details>` answers in the public
+  pages (self-checkable without spoiling predict-first questions). These are
+  fine publicly — the never-public rule covers only the graded assignment
+  solution and answer key. Instructor framing stays in the answer key.
 
 ## 8. Standing to-dos / open items
 

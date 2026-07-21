@@ -116,6 +116,11 @@ asyncio.run(count_presses())
 >
 > **Now fix it with one line:** add `await asyncio.sleep(0.15)` directly under the `print(...)` line and run it again. Ten presses, count of ten. That single line ignores the pin for 150 ms after each detected press — longer than any bounce burst, shorter than any intentional second press.
 
+> [!NOTE]
+> **Still catching an occasional extra count even with the fix?** Nothing is broken — you've discovered that *releases* bounce too. Walk through the code: the 150 ms sleep starts when a **press** is detected. By the time you let go, the counter is re-armed and watching again — and if the release chatter happens to flicker the pin `1` then `0` between two polls, that's a brand-new falling edge, indistinguishable from a press. The one-liner ignores bounce *after a detection*, but nothing guards the moment of release.
+>
+> A fully robust debounce closes that gap by refusing to re-arm until the pin has sat **stable at released (`1`)** for some time — ignoring *state changes*, not just time. We stick with the one-liner here because it's one line, and in the reaction game a round ends on the first press anyway, so a phantom edge at release has nothing left to break. But if you saw this happen on your bench, you now understand debouncing better than the fix does — and the optional [Part E](06-part-e-robust-debounce.md) lets you build the bulletproof version yourself.
+
 ## A note on debouncing
 
 What you just saw is why B2's button coroutine sleeps for 0.15 s after each press — and why the reaction-game assignment's rubric has a "no double-triggers" row. Debouncing isn't optional polish; an undebounced button in the game would register one press as several and instantly decide rounds twice.

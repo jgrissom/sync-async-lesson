@@ -21,7 +21,8 @@ Work through these in order:
 4. [Part B — Asynchronous Programming](lessons/03-part-b-asynchronous.md) — *45 min*
 5. [Part C — The Onboard DotStar](lessons/04-part-c-dotstar.md) — *25 min*
 6. [Part D — Hardware Debounce Experiment (optional)](lessons/05-part-d-hardware-debounce.md) — *bonus*
-7. [Assignment — Reaction-Timer Game](assignment/README.md) — *50 min, graded*
+7. [Part E — Robust Debouncing in Software (optional)](lessons/06-part-e-robust-debounce.md) — *bonus*
+8. [Assignment — Reaction-Timer Game](assignment/README.md) — *50 min, graded*
 
 Something not working? → **[Troubleshooting & FAQ](TROUBLESHOOTING.md)** (wrong COM port, `OSError: 28`, crashed async loops, dark DotStar, and more).
 
