@@ -26,6 +26,8 @@ counts = {"A": 0, "B": 0}
 
 async def raw_counter(btn, name):
     # NO software debounce on purpose -- we want to SEE the bounce.
+    # sleep(0) = yield but don't wait: poll flat-out, because bounce
+    # can be over in under a millisecond and a 1 ms nap would miss it.
     prev = 1
     while True:
         now = btn.value()
@@ -33,7 +35,7 @@ async def raw_counter(btn, name):
             counts[name] += 1
             print(name, "press count:", counts[name])
         prev = now
-        await asyncio.sleep(0.001)      # poll fast to catch bounce
+        await asyncio.sleep(0)          # yield, then look again immediately
 
 
 async def main():

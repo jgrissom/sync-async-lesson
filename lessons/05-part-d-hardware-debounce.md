@@ -102,7 +102,7 @@ async def raw_counter(btn, name):
             counts[name] += 1
             print(name, "press count:", counts[name])
         prev = now
-        await asyncio.sleep(0.001)     # poll fast to catch bounce
+        await asyncio.sleep(0)         # yield, then look again immediately
 
 async def main():
     print("Press each button 10 times. Compare the totals.")

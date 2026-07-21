@@ -109,9 +109,9 @@ asyncio.run(main())
 
 ## B3 — see the bounce for yourself
 
-B2's button coroutine contains a mysterious `await asyncio.sleep(0.15)` labeled "crude debounce." Before trusting it, let's *see* the problem it solves. Mechanical switches don't close cleanly — the metal contacts physically vibrate for a few milliseconds, producing a burst of rapid on/off transitions called **bounce**. Your code polls fast enough to catch them all.
+B2's button coroutine contains a mysterious `await asyncio.sleep(0.15)` labeled "crude debounce." Before trusting it, let's *see* the problem it solves. Mechanical switches don't close cleanly — the metal contacts physically vibrate, producing a burst of rapid on/off transitions called **bounce**. The burst is *fast*: often over in under a millisecond.
 
-This counter has **no debounce at all**. It counts every press it detects:
+That speed dictates how this rig is built. To catch bounce you have to look at the pin more often than it changes — a counter that naps even 1 ms between looks can sleep through an entire burst and wake to a settled pin, accidentally debouncing the very thing it's trying to expose. So this counter uses `await asyncio.sleep(0)`: it *yields* to the scheduler (staying a good async citizen) but doesn't *wait*, polling flat-out. It has **no debounce at all** and counts every falling edge it sees:
 
 ```python
 from machine import Pin
@@ -129,15 +129,45 @@ async def count_presses():
             count += 1
             print("press", count)
         prev = now
-        await asyncio.sleep(0.001)   # poll fast enough to catch bounce
+        await asyncio.sleep(0)       # yield, then look again IMMEDIATELY
 
 asyncio.run(count_presses())
 ```
 
 > [!TIP]
-> **Do this:** Press Button A exactly 10 times, counting out loud. Watch the printed count race past you — 13, 17, sometimes 25. Every extra count is one physical press registering as several electrical ones. *(If your button happens to be unusually clean, press slower and softer — a gentle release bounces more.)*
+> **Do this:** Press Button A exactly 10 times, counting out loud. On most switches the printed count overshoots — every extra count is one physical press registering as several electrical ones. Slow, soft presses and lazy releases bounce the most, so try a few styles. *(Getting a clean 10-for-10 every time? Your switch may genuinely settle too fast for polling to catch — see the interrupt counter below before concluding it doesn't bounce.)*
 >
 > **Now fix it with one line:** add `await asyncio.sleep(0.15)` directly under the `print(...)` line and run it again. Ten presses, count of ten. That single line ignores the pin for 150 ms after each detected press — longer than any bounce burst, shorter than any intentional second press.
+
+<details>
+<summary><strong>Counts still clean? Bring out the instrument-grade counter</strong></summary>
+
+Polling — even flat-out — takes snapshots, and MicroPython manages a look every few hundred microseconds at best. A **hardware interrupt** removes the sampling limit: the chip itself calls your function on every falling edge it detects, no polling involved.
+
+```python
+from machine import Pin
+import time
+
+btn = Pin(18, Pin.IN, Pin.PULL_UP)
+edges = 0
+
+def on_falling(pin):
+    global edges
+    edges += 1
+
+btn.irq(trigger=Pin.IRQ_FALLING, handler=on_falling)
+
+shown = 0
+while True:
+    if edges != shown:
+        shown = edges
+        print("falling edges:", edges)
+    time.sleep(0.2)
+```
+
+Press 10 times again. If even *this* counts 10, congratulations — your particular switch really is that clean (they vary a lot between models and even between units). The bounce problem is still real for the switch next to yours, and interrupts get their own proper treatment in a later session.
+
+</details>
 
 > [!NOTE]
 > **Still catching an occasional extra count even with the fix?** Nothing is broken — you've discovered that *releases* bounce too. Walk through the code: the 150 ms sleep starts when a **press** is detected. By the time you let go, the counter is re-armed and watching again — and if the release chatter happens to flicker the pin `1` then `0` between two polls, that's a brand-new falling edge, indistinguishable from a press. The one-liner ignores bounce *after a detection*, but nothing guards the moment of release.

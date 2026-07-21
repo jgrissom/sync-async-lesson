@@ -30,6 +30,13 @@ it. Every design choice serves that:
   line is explained — same show-then-fix move as Part A's broken button. B3's
   counter is deliberately the same rig as Part D's `debounce_test.py`, so the
   optional hardware segment starts on familiar code.
+- **Bounce-counter rigs must poll with `await asyncio.sleep(0)`** (yield, no
+  wait), never `sleep(0.001)`: bounce bursts are often sub-millisecond, and a
+  1 ms nap sleeps through the whole burst — the rig accidentally debounces
+  what it's demonstrating. Found the hard way on a real bench (clean 10-for-10
+  counts). B3 keeps an IRQ edge-counter in a collapsible as the
+  instrument-grade fallback for genuinely fast-settling switches. Bench
+  gotcha: a Part D cap left across Button A also makes B3 count clean.
 
 ## 2. Pin assignments — and why these exact pins
 
