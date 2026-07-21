@@ -6,7 +6,7 @@
 
 ---
 
-Build a two-player reaction game that ties everything together. This is **graded** and must run on the hardware. Work individually or in pairs as directed.
+Build a two-player reaction game that ties everything together. Work individually or in pairs.
 
 ## How the game works
 
@@ -18,14 +18,14 @@ Build a two-player reaction game that ties everything together. This is **graded
 
 ## Requirements (grading rubric)
 
-| # | Requirement | Points |
-|---|---|---|
-| 1 | Program uses `uasyncio` with at least two concurrent tasks (no blocking `time.sleep` in the main logic) | 25 |
-| 2 | Random 2–5 s delay before GO (use the `random` module) | 15 |
-| 3 | Correctly detects the first button pressed after GO and names the winner | 20 |
-| 4 | False-start detection: pressing before GO loses | 15 |
-| 5 | DotStar and buzzer feedback for win, loss, and false start | 15 |
-| 6 | Buttons are debounced; no double-triggers | 10 |
+| #   | Requirement                                                                                             | Points |
+| --- | ------------------------------------------------------------------------------------------------------- | ------ |
+| 1   | Program uses `uasyncio` with at least two concurrent tasks (no blocking `time.sleep` in the main logic) | 25     |
+| 2   | Random 2–5 s delay before GO (use the `random` module)                                                  | 15     |
+| 3   | Correctly detects the first button pressed after GO and names the winner                                | 20     |
+| 4   | False-start detection: pressing before GO loses                                                         | 15     |
+| 5   | DotStar and buzzer feedback for win, loss, and false start                                              | 15     |
+| 6   | Buttons are debounced; no double-triggers                                                               | 10     |
 
 **Total: 100 points.**
 
@@ -102,12 +102,6 @@ asyncio.run(main())
 - Add LED 1 (red) as a "wait" light that mirrors the red phase (on while waiting, off at GO), and make both LEDs pulse via PWM instead of on/off.
 - Track and print a running best reaction time using `time.ticks_ms()` / `time.ticks_diff()`.
 - Best-of-three match: first player to win 2 rounds gets a victory animation on the DotStar.
-
-## Submission
-
-- Save your file as `reaction_game_<yourname>.py`.
-- Demonstrate a full round to the instructor: a valid win **and** a false start.
-- Submit the `.py` file through the course portal before the end of session.
 
 ---
 
