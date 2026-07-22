@@ -10,14 +10,15 @@ Session 3's reaction game becomes a connected device: every round's result is PO
 
 | Block | Activity | Time |
 |---|---|---|
-| Warm-up | Join the Wi-Fi, `secrets.py`, NTP time | 35 min |
+| Review | Session 3 assignment — live-code the solution from the starter | 10 min |
+| Warm-up | Join the Wi-Fi, `secrets.py`, NTP time | 30 min |
 | Part A | HTTP + JSON with blocking `urequests` — feel the freeze | 35 min |
 | Break | Stretch / troubleshoot | 10 min |
 | Part B | Async requests — GET and POST without freezing | 40 min |
 | Part C | Graft networking into *your* reaction game | 30 min |
 | Break | Stretch | 5 min |
 | Assignment | Finish the connected game, demo on the live leaderboard | 45 min |
-| Wrap-up | Standings ceremony, review, Q&A | 10 min |
+| Wrap-up | Standings ceremony, Q&A | 5 min |
 | *Optional* | *Part D — your board as a web server (if time permits)* | *+25 min* |
 
 > [!TIP]

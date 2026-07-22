@@ -16,7 +16,7 @@ Last session you built a two-player reaction game and learned why `await` beats 
 ## Lesson navigation
 
 1. [Session Overview & Timing](lessons/00-overview.md)
-2. [Warm-up: Getting on the Network](lessons/01-setup.md) — *35 min*
+2. [Warm-up: Getting on the Network](lessons/01-setup.md) — *30 min*
 3. [Part A — Talking HTTP (the blocking way)](lessons/02-part-a-requests.md) — *35 min*
 4. [Part B — Async Requests](lessons/03-part-b-async-requests.md) — *40 min*
 5. [Part C — Your Game Goes Online](lessons/04-part-c-connected-game.md) — *30 min*
