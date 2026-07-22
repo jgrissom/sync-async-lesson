@@ -23,3 +23,9 @@ Thumbs.db
 __pycache__/
 *.pyc
 .vscode/
+
+# Test/browser artifacts
+.playwright-mcp/
+scoreboard_data.json
+*.png
+!sessions/*/diagrams/*.png
