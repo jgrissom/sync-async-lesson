@@ -1,6 +1,6 @@
 # ============================================================
 # Tiny async HTTP client for MicroPython (uasyncio)
-# Python IoT on the TinyPICO : Session 2 (Wi-Fi & IoT)
+# Python IoT on the TinyPICO : Session 4 (Wi-Fi & IoT)
 #
 # Provides:
 #   await async_http.get_json(host, path, port=80)

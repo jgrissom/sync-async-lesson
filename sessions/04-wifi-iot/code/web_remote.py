@@ -1,6 +1,6 @@
 # ============================================================
 # TinyPICO Web Remote  --  Part D (optional)
-# Python IoT on the TinyPICO : Session 2 (Wi-Fi & IoT)
+# Python IoT on the TinyPICO : Session 4 (Wi-Fi & IoT)
 #
 # Your board becomes the SERVER: it hosts a tiny web page.
 # Anyone on the same network can open it and control the bench.

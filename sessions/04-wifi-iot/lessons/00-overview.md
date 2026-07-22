@@ -4,7 +4,7 @@
 
 ---
 
-Session 1's reaction game becomes a connected device: every round's result is POSTed to a live class leaderboard, and every bench fetches the standings between rounds. The arc mirrors Session 1 on purpose — first do networking the blocking way and *feel* it freeze the game, then do it the async way and watch the game stay alive.
+Session 3's reaction game becomes a connected device: every round's result is POSTed to a live class leaderboard, and every bench fetches the standings between rounds. The arc mirrors Session 3 on purpose — first do networking the blocking way and *feel* it freeze the game, then do it the async way and watch the game stay alive.
 
 ## Time budget (3.5 hours / 210 minutes)
 

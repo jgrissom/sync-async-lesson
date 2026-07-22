@@ -113,13 +113,13 @@ finally:
 ```
 
 > [!TIP]
-> **Do this:** watch the DotStar. Every four seconds — *freeze*. The rainbow locks solid for the entire network round-trip, because `requests.get()` never yields. It's Session 1's `time.sleep()` disease wearing a networking costume — except now the freeze length is up to the *network*, not you.
+> **Do this:** watch the DotStar. Every four seconds — *freeze*. The rainbow locks solid for the entire network round-trip, because `requests.get()` never yields. It's Session 3's `time.sleep()` disease wearing a networking costume — except now the freeze length is up to the *network*, not you.
 >
 > Imagine this inside your reaction game: every score report would freeze the wait beacon, the buttons, everything. Unacceptable. Part B fixes it.
 
 ## Discussion (5 min)
 
-**Q1. In Session 1 we banned `time.sleep()` from async programs. What's the equivalent rule for networking, and why is it worse?**
+**Q1. In Session 3 we banned `time.sleep()` from async programs. What's the equivalent rule for networking, and why is it worse?**
 
 <details>
 <summary>Answer</summary>

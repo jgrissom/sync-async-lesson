@@ -6,7 +6,7 @@
 
 ---
 
-Same breadboard as Session 1 — nothing to wire today. The new hardware is invisible: the ESP32's built-in Wi-Fi radio.
+Same breadboard as Session 3 — nothing to wire today. The new hardware is invisible: the ESP32's built-in Wi-Fi radio.
 
 > [!IMPORTANT]
 > **Two facts about ESP32 Wi-Fi that cause most failures:**

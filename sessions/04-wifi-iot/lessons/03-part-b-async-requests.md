@@ -6,7 +6,7 @@
 
 ---
 
-The fix for A2's freeze is the same idea as Session 1's: **turn every wait into an `await`.** A network request is mostly waiting — for the connection, for the server, for the bytes — and every one of those waits can yield to the scheduler instead of hogging it.
+The fix for A2's freeze is the same idea as Session 3's: **turn every wait into an `await`.** A network request is mostly waiting — for the connection, for the server, for the bytes — and every one of those waits can yield to the scheduler instead of hogging it.
 
 Upload [`async_http.py`](../code/async_http.py) to your board (like a library — import it, don't edit it). It gives you two coroutines:
 

@@ -1,4 +1,4 @@
-# Session 2 — Wi-Fi & the Internet of Things
+# Session 4 — Wi-Fi & the Internet of Things
 
 *Part of the [Python IoT on the TinyPICO curriculum](../../README.md).*
 
@@ -7,9 +7,9 @@ Last session you built a two-player reaction game and learned why `await` beats 
 | | |
 |---|---|
 | **Duration** | 3.5 hours (210 min) + optional bonus segment |
-| **Level** | Intermediate Python (Session 1 required) |
+| **Level** | Intermediate Python (Session 3 required) |
 | **Environment** | [Thonny](https://thonny.org/) + MicroPython |
-| **Board** | TinyPICO ESP32 — same bench wiring as Session 1 |
+| **Board** | TinyPICO ESP32 — same bench wiring as Session 3 |
 
 ---
 
@@ -33,7 +33,7 @@ Something not working? → **[Troubleshooting & FAQ](../../TROUBLESHOOTING.md)**
 | [`code/secrets_TEMPLATE.py`](code/secrets_TEMPLATE.py) | Copy to `secrets.py`, fill in, upload — **never commit `secrets.py`** |
 | [`code/wifi_connect.py`](code/wifi_connect.py) | Wi-Fi join helper — upload to the board like a library |
 | [`code/async_http.py`](code/async_http.py) | Tiny async HTTP client (GET/POST JSON) — upload like a library |
-| [`code/game_online_STARTER.py`](code/game_online_STARTER.py) | The network additions you graft into *your* Session 1 game |
+| [`code/game_online_STARTER.py`](code/game_online_STARTER.py) | The network additions you graft into *your* Session 3 game |
 | [`code/web_remote.py`](code/web_remote.py) | Part D: the board serves a control page to your phone |
 | [`code/scoreboard_server.py`](code/scoreboard_server.py) | The class scoreboard (runs on the instructor's laptop — normal Python 3) |
 

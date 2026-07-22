@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # ============================================================
 # Reaction-Game Scoreboard Server
-# Python IoT on the TinyPICO : Session 2 (Wi-Fi & IoT)
+# Python IoT on the TinyPICO : Session 4 (Wi-Fi & IoT)
 #
 # Runs on the INSTRUCTOR'S LAPTOP (normal Python 3, not the
 # board). Standard library only -- no installs needed.

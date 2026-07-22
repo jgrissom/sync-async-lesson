@@ -1,6 +1,6 @@
 # ============================================================
 # Wi-Fi connect helper (synchronous)
-# Python IoT on the TinyPICO : Session 2 (Wi-Fi & IoT)
+# Python IoT on the TinyPICO : Session 4 (Wi-Fi & IoT)
 #
 # Usage (after creating secrets.py from secrets_TEMPLATE.py):
 #

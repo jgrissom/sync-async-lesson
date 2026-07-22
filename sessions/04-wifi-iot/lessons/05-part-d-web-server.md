@@ -10,7 +10,7 @@ All day your board has been a **client** — asking servers for things. Flip it:
 
 ## Run it
 
-1. Board needs: `secrets.py`, `wifi_connect.py`, plus the Session 1 DotStar libraries.
+1. Board needs: `secrets.py`, `wifi_connect.py`, plus the Session 3 DotStar libraries.
 2. Run `web_remote.py`. It prints something like `>>> Open http://10.1.4.27/ <<<`.
 3. On a phone or laptop **on the same network**, open that address. Tap away.
 

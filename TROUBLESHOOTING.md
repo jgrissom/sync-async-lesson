@@ -42,7 +42,7 @@ Error 28 = the board's flash filesystem is **full**. The TinyPICO has ~4 MB and 
 
 ### `ImportError: no module named 'micropython_dotstar'` (or `'tinypico'`)
 
-The helper library isn't on the board. Follow the upload steps in [Part C](sessions/01-sync-async/lessons/04-part-c-dotstar.md) — download from [tinypico/tinypico-micropython](https://github.com/tinypico/tinypico-micropython), then Thonny → View → Files → right-click the file → *Upload to /*. Do **not** rename `micropython_dotstar.py`; the import matches the real filename.
+The helper library isn't on the board. Follow the upload steps in [Part C](sessions/03-sync-async/lessons/04-part-c-dotstar.md) — download from [tinypico/tinypico-micropython](https://github.com/tinypico/tinypico-micropython), then Thonny → View → Files → right-click the file → *Upload to /*. Do **not** rename `micropython_dotstar.py`; the import matches the real filename.
 
 ### The board runs an old program every time it powers on, and I can't get a prompt
 
@@ -58,7 +58,7 @@ Stop/Restart button. If it persists: unplug the board, close Thonny, plug in, re
 
 ### An LED never lights
 
-- **Polarity:** long leg (anode) goes to the GPIO side; short leg (cathode) to the resistor, then GND — see the [wiring diagram](sessions/01-sync-async/diagrams/wiring.svg). (Resistor on the anode side works too — it just has to be *somewhere* in the series loop.)
+- **Polarity:** long leg (anode) goes to the GPIO side; short leg (cathode) to the resistor, then GND — see the [wiring diagram](sessions/03-sync-async/diagrams/wiring.svg). (Resistor on the anode side works too — it just has to be *somewhere* in the series loop.)
 - The 330 Ω resistor must be **in series** (in the same current path), not on a random row.
 - Jumper actually in the GPIO's breadboard column? Off-by-one rows are the classic.
 - Test the pin from the REPL: `from machine import Pin; Pin(26, Pin.OUT).on()` — if the LED lights now, the problem was the program, not the wiring.
@@ -84,7 +84,7 @@ That's not a fault — that's the lesson. Something in your code is blocking. Hu
 
 ---
 
-## Wi-Fi & network (Session 2+)
+## Wi-Fi & network (Session 4+)
 
 ### The board won't join the Wi-Fi
 

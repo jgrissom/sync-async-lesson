@@ -6,7 +6,7 @@
 
 ---
 
-Time to connect the thing you actually care about. You'll graft networking onto **your own** finished reaction game from Session 1 — open your `reaction_game_<yourname>.py` next to [`game_online_STARTER.py`](../code/game_online_STARTER.py), which contains every piece with instructions for where it goes.
+Time to connect the thing you actually care about. You'll graft networking onto **your own** finished reaction game from Session 3 — open your `reaction_game_<yourname>.py` next to [`game_online_STARTER.py`](../code/game_online_STARTER.py), which contains every piece with instructions for where it goes.
 
 The plan, in the language of B3:
 
@@ -24,10 +24,10 @@ Work through `game_online_STARTER.py` top to bottom — it's organized as four g
 - **GRAFT 4** — `wifi_connect.connect()` *before* `asyncio.run(main())`, keeping your `try/finally` cleanup.
 
 > [!TIP]
-> **Test as you graft** (Session 1 habit, same reason): after GRAFT 2 + TODO 1, play one round and watch the projector — your bench's row should tick up. Then add TODO 2 and confirm standings print between rounds. Then the flourish. If a stage breaks, the fault is in the piece you just added.
+> **Test as you graft** (Session 3 habit, same reason): after GRAFT 2 + TODO 1, play one round and watch the projector — your bench's row should tick up. Then add TODO 2 and confirm standings print between rounds. Then the flourish. If a stage breaks, the fault is in the piece you just added.
 
 > [!NOTE]
-> **Sanity check before you start:** the game itself must still be flawless. If your Session 1 game has a lingering bug, fix that first — networking grafted onto a broken game debugs like a nightmare, because every symptom has two suspects.
+> **Sanity check before you start:** the game itself must still be flawless. If your Session 3 game has a lingering bug, fix that first — networking grafted onto a broken game debugs like a nightmare, because every symptom has two suspects.
 
 ## The moment worth noticing
 

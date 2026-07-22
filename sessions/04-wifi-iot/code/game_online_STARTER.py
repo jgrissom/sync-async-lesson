@@ -1,9 +1,9 @@
 # ============================================================
 # Go Online!  --  network additions for YOUR reaction game
-# Python IoT on the TinyPICO : Session 2 (Wi-Fi & IoT)
+# Python IoT on the TinyPICO : Session 4 (Wi-Fi & IoT)
 #
 # This file is NOT a complete program. It holds the pieces you
-# graft into your own finished reaction game from Session 1.
+# graft into your own finished reaction game from Session 3.
 # Open your reaction_game_<yourname>.py next to this file and:
 #
 #   GRAFT 1 -- add the imports below to the top of your game

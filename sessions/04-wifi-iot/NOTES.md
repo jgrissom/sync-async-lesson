@@ -1,6 +1,6 @@
-# Design-Decision Log — Session 2 (Wi-Fi & IoT)
+# Design-Decision Log — Session 4 (Wi-Fi & IoT)
 
-Companion to Session 1's [NOTES.md](../01-sync-async/NOTES.md); same purpose,
+Companion to Session 3's [NOTES.md](../03-sync-async/NOTES.md); same purpose,
 safe for the public repo.
 
 ## The core bet
@@ -9,7 +9,7 @@ The session is built around **the students' own reaction game going online**
 (instead of a generic weather/data project). Reasons: continuity and
 ownership; a live class leaderboard on the projector; POST + GET + JSON all
 arise naturally; and blocking has *stakes* — a blocking call visibly freezes
-the game students built. The A2→B1 freeze/cure pair is Session 1's
+the game students built. The A2→B1 freeze/cure pair is Session 3's
 `time.sleep()` argument restaged with the network as the villain.
 
 ## Network-resilience decisions (load-bearing)
@@ -40,7 +40,7 @@ the game students built. The A2→B1 freeze/cure pair is Session 1's
   solution; students can run their own at home.
 - **API surface kept tiny on purpose:** `GET /scores`, `GET /scores/<bench>`,
   `POST /result {bench, player, result}`. Player names must match the
-  Session 1 cap colors ("Blue"/"Yellow") — the server validates them.
+  Session 3 cap colors ("Blue"/"Yellow") — the server validates them.
 - **Bench identity lives in `secrets.py`** (`BENCH`) alongside Wi-Fi
   credentials and `SCOREBOARD_HOST` — one per-bench file holds everything
   bench-specific; code files stay identical on every board.
@@ -68,13 +68,13 @@ the game students built. The A2→B1 freeze/cure pair is Session 1's
 
 ## Pedagogy notes
 
-- Part C **grafts onto each student's own Session 1 game** rather than
+- Part C **grafts onto each student's own Session 3 game** rather than
   shipping a complete game in the repo — a complete base game would leak
-  the Session 1 solution publicly. Students without their file get the
+  the Session 3 solution publicly. Students without their file get the
   instructor solution privately (answer key notes this).
 - `await` vs `create_task()` (B3's table) is the session's conceptual
   centerpiece: report = fire-and-forget, standings = awaited, and the
   rubric penalizes awaiting the report (it parks the game on timeouts
   exactly when the network is worst).
 - Wi-Fi *connection* is done synchronously and the lesson says why —
-  reinforces Session 1's "blocking is a choice; sometimes the right one."
+  reinforces Session 3's "blocking is a choice; sometimes the right one."

@@ -1,4 +1,4 @@
-# Session 1 — Synchronous vs. Asynchronous Programming
+# Session 3 — Synchronous vs. Asynchronous Programming
 
 *Part of the [Python IoT on the TinyPICO curriculum](../../README.md).*
 
