@@ -1,0 +1,29 @@
+- generic [active] [ref=e1]:
+  - heading "Reaction Game — Live Leaderboard" [level=1] [ref=e2]
+  - generic [ref=e3]: It's a tie!
+  - generic [ref=e4]:
+    - generic [ref=e5]: Blue 1
+    - text: ":"
+    - generic [ref=e6]: 1 Yellow
+  - table [ref=e7]:
+    - rowgroup [ref=e8]:
+      - row [ref=e9]:
+        - columnheader [ref=e10]
+        - columnheader "Blue wins" [ref=e11]
+        - columnheader "false starts" [ref=e12]
+        - columnheader "Yellow wins" [ref=e13]
+        - columnheader "false starts" [ref=e14]
+    - rowgroup [ref=e15]:
+      - row [ref=e16]:
+        - cell "Bench 1" [ref=e17]
+        - cell "1" [ref=e18]
+        - cell "0" [ref=e19]
+        - cell "0" [ref=e20]
+        - cell "1" [ref=e21]
+      - row [ref=e22]:
+        - cell "Bench 3" [ref=e23]
+        - cell "0" [ref=e24]
+        - cell "0" [ref=e25]
+        - cell "1" [ref=e26]
+        - cell "0" [ref=e27]
+  - paragraph [ref=e28]: Live · updates every 1.5 s · POST /result · GET /scores

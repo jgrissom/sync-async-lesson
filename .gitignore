@@ -13,6 +13,10 @@
 *ANSWER_KEY*
 *answer-key*
 
+# Wi-Fi credentials (session 2+) -- each bench makes its own from
+# secrets_TEMPLATE.py; real credentials never enter the repo
+secrets.py
+
 # OS / editor noise
 .DS_Store
 Thumbs.db

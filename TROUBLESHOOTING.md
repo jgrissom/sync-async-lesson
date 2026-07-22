@@ -42,7 +42,7 @@ Error 28 = the board's flash filesystem is **full**. The TinyPICO has ~4 MB and 
 
 ### `ImportError: no module named 'micropython_dotstar'` (or `'tinypico'`)
 
-The helper library isn't on the board. Follow the upload steps in [Part C](lessons/04-part-c-dotstar.md) — download from [tinypico/tinypico-micropython](https://github.com/tinypico/tinypico-micropython), then Thonny → View → Files → right-click the file → *Upload to /*. Do **not** rename `micropython_dotstar.py`; the import matches the real filename.
+The helper library isn't on the board. Follow the upload steps in [Part C](sessions/01-sync-async/lessons/04-part-c-dotstar.md) — download from [tinypico/tinypico-micropython](https://github.com/tinypico/tinypico-micropython), then Thonny → View → Files → right-click the file → *Upload to /*. Do **not** rename `micropython_dotstar.py`; the import matches the real filename.
 
 ### The board runs an old program every time it powers on, and I can't get a prompt
 
@@ -58,7 +58,7 @@ Stop/Restart button. If it persists: unplug the board, close Thonny, plug in, re
 
 ### An LED never lights
 
-- **Polarity:** long leg (anode) goes to the GPIO side; short leg (cathode) to the resistor, then GND — see the [wiring diagram](diagrams/wiring.svg). (Resistor on the anode side works too — it just has to be *somewhere* in the series loop.)
+- **Polarity:** long leg (anode) goes to the GPIO side; short leg (cathode) to the resistor, then GND — see the [wiring diagram](sessions/01-sync-async/diagrams/wiring.svg). (Resistor on the anode side works too — it just has to be *somewhere* in the series loop.)
 - The 330 Ω resistor must be **in series** (in the same current path), not on a random row.
 - Jumper actually in the GPIO's breadboard column? Off-by-one rows are the classic.
 - Test the pin from the REPL: `from machine import Pin; Pin(26, Pin.OUT).on()` — if the LED lights now, the problem was the program, not the wiring.
@@ -81,6 +81,41 @@ Passive piezo buzzers need a tone (PWM), not a steady on. The buzzers in this co
 ### The DotStar rainbow stutters (Part C)
 
 That's not a fault — that's the lesson. Something in your code is blocking. Hunt for any `time.sleep()` in a coroutine, or a loop that never `await`s.
+
+---
+
+## Wi-Fi & network (Session 2+)
+
+### The board won't join the Wi-Fi
+
+- **2.4 GHz only.** The ESP32 cannot see 5 GHz-only networks. Confirm the SSID broadcasts on 2.4 GHz.
+- **SSID/password typo in `secrets.py`** — case matters.
+- **MAC not registered** (school guest network): run `print_mac.py`, check the address against the registered list.
+- **Captive portal:** if joining this network on a laptop pops a login page, the board can't use it — boards can't click "Accept." Use the registered/hotspot network instead.
+
+### `ImportError: no module named 'secrets'` (or `wifi_connect`, `async_http`)
+
+The file isn't on the board. These upload like libraries: Thonny → View → Files → right-click → *Upload to /*. Remember `secrets.py` is one you *create* from `secrets_TEMPLATE.py` — the template alone isn't enough.
+
+### Requests fail with `OSError: -202` (or `getaddrinfo` errors)
+
+DNS lookup failed — the board is on Wi-Fi but can't resolve names. Usually: no actual internet on this network (fine for the scoreboard — that's a raw IP), or Wi-Fi dropped. Reconnect with `wifi_connect.connect()`.
+
+### Requests to the scoreboard time out, but the leaderboard works on the laptop
+
+Almost always **client isolation**: the network blocks device-to-device traffic. Test: can a *phone* browser open the leaderboard URL? If not, it's the network, not your code — the class fallback is the instructor's hotspot. (Outbound internet requests still work under isolation; only local traffic is blocked.)
+
+### `OSError: [Errno 104] ECONNRESET` / occasional failed requests
+
+Networks drop connections; it's their hobby. This is exactly why the lesson wraps every network call in `try/except OSError` — confirm yours does, and let the next attempt succeed.
+
+### Requests start failing after several successes
+
+Socket leak — something isn't calling `r.close()` (blocking library) or is bypassing `async_http` (which closes for you). Ctrl+F2 resets the sockets; then fix the leak.
+
+### `ntptime.settime()` times out
+
+The network has no internet (or blocks NTP's port). Skip it — nothing in the session depends on the clock.
 
 ---
 

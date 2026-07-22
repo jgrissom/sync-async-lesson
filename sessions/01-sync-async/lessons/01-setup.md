@@ -37,7 +37,7 @@
 4. Build the circuit on the breadboard following the pin map above, with power **off** (USB unplugged) while wiring.
 
 > [!TIP]
-> Thonny won't connect, no `>>>` prompt, or the board seems possessed? The [Troubleshooting & FAQ](../TROUBLESHOOTING.md) covers the common failures — starting with charge-only USB cables and the wrong COM port.
+> Thonny won't connect, no `>>>` prompt, or the board seems possessed? The [Troubleshooting & FAQ](../../../TROUBLESHOOTING.md) covers the common failures — starting with charge-only USB cables and the wrong COM port.
 
 ## 3. Wiring test — confirm every component
 
@@ -87,7 +87,7 @@ print("All wiring checks passed! Your breadboard is ready.")
 ```
 
 > [!WARNING]
-> **A step failed?** Fix that one component before moving on — the test names the exact pin. LEDs: check polarity (long leg = anode = GPIO side; short leg → resistor → GND) and that the resistor is in series. Buttons: if the test says a button already reads pressed, the pin is shorted to GND; if pressing does nothing, the button legs aren't bridging the pin to GND (use opposite corners). More help: [Troubleshooting & FAQ](../TROUBLESHOOTING.md).
+> **A step failed?** Fix that one component before moving on — the test names the exact pin. LEDs: check polarity (long leg = anode = GPIO side; short leg → resistor → GND) and that the resistor is in series. Buttons: if the test says a button already reads pressed, the pin is shorted to GND; if pressing does nothing, the button legs aren't bridging the pin to GND (use opposite corners). More help: [Troubleshooting & FAQ](../../../TROUBLESHOOTING.md).
 
 > [!NOTE]
 > Two things to notice, both of which matter later: the onboard **DotStar isn't tested here** — it needs a library you'll install in [Part C](04-part-c-dotstar.md). And this test is *synchronous* code — each step blocks until it finishes, which is fine for a step-by-step checklist. By the end of the session you'll know exactly when it stops being fine.
