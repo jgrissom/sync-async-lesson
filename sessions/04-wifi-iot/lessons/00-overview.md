@@ -22,7 +22,7 @@ Session 3's reaction game becomes a connected device: every round's result is PO
 | *Optional* | *Part D — your board as a web server (if time permits)* | *+25 min* |
 
 > [!TIP]
-> Parts A–C and the assignment need only the **scoreboard server on the classroom network** — no internet required. The internet-flavored extras (NTP, a real public weather API) are seasoning: if the school network is uncooperative, skip them and nothing downstream breaks.
+> The class scoreboard is **hosted in the cloud**, so Parts A–C and the assignment need only *outbound* internet — the kind of traffic guest networks allow even when they block device-to-device connections. If the venue network is truly hostile, the instructor has a fallback (phone hotspot + a local copy of the scoreboard); your code doesn't change either way — only two values in `secrets.py`.
 
 ## Learning objectives
 

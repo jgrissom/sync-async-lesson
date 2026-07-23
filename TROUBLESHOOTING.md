@@ -99,11 +99,13 @@ The file isn't on the board. These upload like libraries: Thonny → View → Fi
 
 ### Requests fail with `OSError: -202` (or `getaddrinfo` errors)
 
-DNS lookup failed — the board is on Wi-Fi but can't resolve names. Usually: no actual internet on this network (fine for the scoreboard — that's a raw IP), or Wi-Fi dropped. Reconnect with `wifi_connect.connect()`.
+DNS lookup failed — the board is on Wi-Fi but can't resolve names. The cloud scoreboard is reached by hostname, so it needs DNS: usually this means the network has no actual internet, or Wi-Fi dropped — reconnect with `wifi_connect.connect()`. (If class is running in fallback mode against a local scoreboard, that's a raw IP and DNS isn't involved — this error then points at a different name, likely a public API's.)
 
-### Requests to the scoreboard time out, but the leaderboard works on the laptop
+### Requests to the scoreboard time out, but the leaderboard loads in a browser
 
-Almost always **client isolation**: the network blocks device-to-device traffic. Test: can a *phone* browser open the leaderboard URL? If not, it's the network, not your code — the class fallback is the instructor's hotspot. (Outbound internet requests still work under isolation; only local traffic is blocked.)
+First check the browser and board are testing the same thing: on a phone **on the class network**, open `http://<SCOREBOARD_HOST>/scores` (note *http*). If the phone can't load it either, the network is blocking plain outbound HTTP — flag the instructor; that's a network problem with a planned fallback, not your code. If the phone loads it but your board times out, recheck `SCOREBOARD_HOST`/`SCOREBOARD_PORT` in `secrets.py` (port must be `80` for the cloud scoreboard) and confirm Wi-Fi is still up.
+
+*Fallback mode only (local scoreboard on a laptop):* timeouts there are almost always **client isolation** — the network blocks device-to-device traffic. That's exactly why class normally runs against the cloud.
 
 ### `OSError: [Errno 104] ECONNRESET` / occasional failed requests
 

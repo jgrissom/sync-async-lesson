@@ -35,7 +35,7 @@ Something not working? → **[Troubleshooting & FAQ](../../TROUBLESHOOTING.md)**
 | [`code/async_http.py`](code/async_http.py) | Tiny async HTTP client (GET/POST JSON) — upload like a library |
 | [`code/game_online_STARTER.py`](code/game_online_STARTER.py) | The network additions you graft into *your* Session 3 game |
 | [`code/web_remote.py`](code/web_remote.py) | Part D: the board serves a control page to your phone |
-| [`code/scoreboard_server.py`](code/scoreboard_server.py) | The class scoreboard (runs on the instructor's laptop — normal Python 3) |
+| [`code/scoreboard_server.py`](code/scoreboard_server.py) | Single-file twin of the class scoreboard (normal Python 3) — the class instance runs in the cloud ([`scoreboard-cloud/`](../../scoreboard-cloud/)); this one is the offline fallback, and yours to run at home |
 
 ## What students will be able to do
 

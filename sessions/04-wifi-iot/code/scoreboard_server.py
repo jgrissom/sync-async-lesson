@@ -3,8 +3,13 @@
 # Reaction-Game Scoreboard Server
 # Python IoT on the TinyPICO : Session 4 (Wi-Fi & IoT)
 #
-# Runs on the INSTRUCTOR'S LAPTOP (normal Python 3, not the
-# board). Standard library only -- no installs needed.
+# OFFLINE FALLBACK / run-at-home twin of the class scoreboard.
+# Class normally uses the cloud instance (see scoreboard-cloud/
+# in the repo root) -- same API, so boards switch between them
+# via SCOREBOARD_HOST/SCOREBOARD_PORT in secrets.py alone.
+#
+# Runs on a laptop (normal Python 3, not the board). Standard
+# library only -- no installs needed.
 #
 #   Run:            python3 scoreboard_server.py
 #   Leaderboard:    http://<laptop-ip>:8000/        (projector!)

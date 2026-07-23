@@ -11,8 +11,8 @@ The fix for A2's freeze is the same idea as Session 3's: **turn every wait into 
 Upload [`async_http.py`](../code/async_http.py) to your board (like a library — import it, don't edit it). It gives you two coroutines:
 
 ```python
-status, data = await async_http.get_json(host, path, port=8000)
-status, data = await async_http.post_json(host, path, payload, port=8000)
+status, data = await async_http.get_json(host, path, port=80)
+status, data = await async_http.post_json(host, path, payload, port=80)
 ```
 
 > [!NOTE]

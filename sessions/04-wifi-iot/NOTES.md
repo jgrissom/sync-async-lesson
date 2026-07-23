@@ -19,10 +19,15 @@ the game students built. The A2→B1 freeze/cure pair is Session 3's
   server) are the first thing real networks block (client isolation), so
   inbound lives exclusively in the optional part. Never move it into the
   graded path.
-- **The core session needs zero internet.** The scoreboard runs on the
-  instructor's laptop; a phone hotspot with no upstream connectivity can
-  host the entire core lesson. Internet-dependent bits (NTP, open-meteo)
-  are explicitly skip-safe garnish.
+- **The core session needs only *outbound* internet** (revised 2026-07-22;
+  originally "zero internet"). The scoreboard moved to the cloud because
+  the original design's riskiest dependency was board→laptop traffic on a
+  guest network — exactly what client isolation blocks — while outbound
+  HTTP is what guest networks permit. The zero-internet capability is
+  preserved one rung down: phone hotspot + the local `scoreboard_server.py`
+  can still host the entire core lesson, and switching rungs changes only
+  `SCOREBOARD_HOST`/`SCOREBOARD_PORT` in `secrets.py`. NTP and open-meteo
+  remain skip-safe garnish.
 - **Fail-soft is a graded requirement (rubric row 6, 20 pts)** and the
   instructor deliberately kills the server during demos. Connected features
   wrap network calls in `try/except OSError` — a connected device that dies
@@ -31,11 +36,25 @@ the game students built. The A2→B1 freeze/cure pair is Session 3's
 
 ## Infrastructure decisions
 
-- **`scoreboard_server.py` is stdlib-only Python 3** (http.server) — zero
-  installs on the school laptop, one file, scores persist to a JSON file
-  beside it. The leaderboard page polls `/scores` via JS every 1.5 s (chosen
-  over meta-refresh for flicker-free projector display, over
-  SSE/websockets for simplicity). `/reset` clears between classes.
+- **The class scoreboard is cloud-hosted (Azure, `scoreboard-cloud/` at the
+  repo root; added 2026-07-22).** .NET 10 API + SQLite serving the React
+  leaderboard, the classic page, and interactive Scalar docs from one
+  origin. Its JSON contract is verified byte-compatible with
+  `scoreboard_server.py` (a test battery replays identical requests at
+  both, including raw HTTP/1.0), and the one extension — game-name
+  registration — is strictly additive (`names` key; boards and the classic
+  page ignore it). **If either server's contract changes, the other must
+  change with it** — interchangeability is what makes the fallback ladder
+  work. Cloud-only classroom extras: `POST /register` (unique
+  case-insensitive game names, 409 on conflict — doubles as a status-code
+  lesson via Scalar's Test Request) and win confetti on the React page.
+- **`scoreboard_server.py` is stdlib-only Python 3** (http.server) — now
+  the offline-fallback/run-at-home twin: zero installs, one file, scores
+  persist to a JSON file beside it. The leaderboard page polls `/scores`
+  via JS every 1.5 s (chosen over meta-refresh for flicker-free projector
+  display, over SSE/websockets for simplicity — the same reasoning kept
+  the cloud edition on polling instead of SignalR). `/reset` clears
+  between classes.
 - **The server lives in the public repo** — it's infrastructure, not a
   solution; students can run their own at home.
 - **API surface kept tiny on purpose:** `GET /scores`, `GET /scores/<bench>`,

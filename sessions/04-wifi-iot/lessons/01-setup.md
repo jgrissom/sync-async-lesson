@@ -18,7 +18,7 @@ Same breadboard as Session 3 — nothing to wire today. The new hardware is invi
 Network credentials never go in your main program (or in git!). Open [`code/secrets_TEMPLATE.py`](../code/secrets_TEMPLATE.py), **save a copy as `secrets.py`**, and fill in the values announced in class:
 
 - `WIFI_SSID` / `WIFI_PASSWORD` — the class network (empty password if it's open)
-- `SCOREBOARD_HOST` — the instructor laptop's IP, on the board/projector
+- `SCOREBOARD_HOST` / `SCOREBOARD_PORT` — the class scoreboard's address; the template already carries the normal values (change only if a fallback is announced)
 - `BENCH` — your bench number
 
 Upload `secrets.py` **and** [`wifi_connect.py`](../code/wifi_connect.py) to the board (Thonny → View → Files → right-click → *Upload to /*, same as the DotStar library last session).
@@ -53,9 +53,26 @@ The time is **UTC** — expect it to be offset from wall-clock time here. (Netwo
 
 ## 4. Meet the scoreboard
 
-The instructor's laptop is running the class scoreboard (one plain-Python file — [`scoreboard_server.py`](../code/scoreboard_server.py), yours to keep and run at home). Open **`http://<SCOREBOARD_HOST>:8000/`** in the bench laptop's browser: that's the live leaderboard, and it's about to fill up with your rounds.
+The class scoreboard is a real cloud API, running on Azure. Three faces of the same server:
 
-Your board will talk to that same address — which is the whole point of today: **a web page, a laptop, and a microcontroller are all just devices exchanging HTTP on a network.**
+- **`https://<SCOREBOARD_HOST>/`** — the live leaderboard on the projector, about to fill up with your rounds.
+- **`https://<SCOREBOARD_HOST>/scalar`** — the API's interactive documentation. Every endpoint your board will use tonight is described here, and you can call them straight from the page.
+- **`http://<SCOREBOARD_HOST>/scores`** — the raw JSON your board will actually read. Open it and look: no magic, just text.
+
+Your board will talk to that same server — which is the whole point of today: **a web page, a phone, a cloud server, and a microcontroller are all just devices exchanging HTTP.**
+
+### Name your game 🏷️
+
+Your bench's Session 3 creation deserves a title. On a phone, open **`/scalar`**, find **"Name your game"** (`POST /register`), hit **Test Request**, and send:
+
+```json
+{ "bench": "3", "name": "Your Game Title Here" }
+```
+
+with your bench number and your title (40 characters max). A `200` means it's yours — watch the projector. A `409 Conflict` means another bench beat you to that name: read the error, pick a better one. That's your first hand-made API call — your board automates the same thing all evening.
+
+> [!NOTE]
+> Want to run the whole scoreboard yourself at home? A single-file Python version with the same API lives in the repo — [`scoreboard_server.py`](../code/scoreboard_server.py). Point `SCOREBOARD_HOST` at your own laptop and everything tonight works against it.
 
 ---
 

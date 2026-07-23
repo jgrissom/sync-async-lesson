@@ -29,12 +29,12 @@ While you tap, watch the DotStar: the rainbow never misses a frame. The board is
 
 ## Discussion
 
-**Q1. Your board is a server and the scoreboard laptop is a server. Your board is also a client of the scoreboard. What do "client" and "server" actually name?**
+**Q1. Your board is a server and the cloud scoreboard is a server. Your board is also a client of the scoreboard. What do "client" and "server" actually name?**
 
 <details>
 <summary>Answer</summary>
 
-Roles in one conversation, not kinds of machine. Whoever opens the connection and asks is the client; whoever listens and answers is the server. The same device can be both at once — your board serving a phone while POSTing to the laptop is exactly that.
+Roles in one conversation, not kinds of machine. Whoever opens the connection and asks is the client; whoever listens and answers is the server. The same device can be both at once — your board serving a phone while POSTing to the scoreboard is exactly that.
 
 </details>
 

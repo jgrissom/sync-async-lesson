@@ -10,9 +10,10 @@
 WIFI_SSID = "YourNetworkName"
 WIFI_PASSWORD = ""        # "" (empty) for an open / registered guest network
 
-# The scoreboard server (instructor's laptop) -- announced in class
-SCOREBOARD_HOST = "192.168.1.100"
-SCOREBOARD_PORT = 8000
+# The class scoreboard -- hosted in the cloud. These are the normal
+# values; change them ONLY if the instructor announces a fallback.
+SCOREBOARD_HOST = "false-start.azurewebsites.net"
+SCOREBOARD_PORT = 80
 
 # Your bench number ("1" through "7") -- ask if unsure
 BENCH = "1"
