@@ -35,6 +35,7 @@ scoreboard_data.json
 # wwwroot/classic is source and stays tracked.
 scoreboard-cloud/**/bin/
 scoreboard-cloud/**/obj/
+scoreboard-cloud/**/.azure/
 scoreboard-cloud/frontend/node_modules/
 scoreboard-cloud/Scoreboard.Api/wwwroot/app/
 scoreboard-cloud/Scoreboard.Api/publish/
