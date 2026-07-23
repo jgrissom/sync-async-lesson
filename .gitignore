@@ -29,3 +29,15 @@ __pycache__/
 scoreboard_data.json
 *.png
 !sessions/*/diagrams/*.png
+
+# Cloud scoreboard (scoreboard-cloud/): build output + local state.
+# The React bundle is generated into wwwroot/app by `npm run build`;
+# wwwroot/classic is source and stays tracked.
+scoreboard-cloud/**/bin/
+scoreboard-cloud/**/obj/
+scoreboard-cloud/frontend/node_modules/
+scoreboard-cloud/Scoreboard.Api/wwwroot/app/
+scoreboard-cloud/Scoreboard.Api/publish/
+scoreboard-cloud/**/*.db
+scoreboard-cloud/**/*.db-shm
+scoreboard-cloud/**/*.db-wal

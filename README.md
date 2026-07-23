@@ -15,6 +15,10 @@ Each session is self-contained in its own folder, with lessons, a graded assignm
 | 5 | *Coming soon* | 3.5 h | — |
 | 6 | *Coming soon* | 3.5 h | — |
 
+## Class infrastructure
+
+[`scoreboard-cloud/`](scoreboard-cloud/README.md) — Azure-hosted edition of the Session 4 class scoreboard: .NET 10 minimal API with SQLite, interactive [Scalar](https://scalar.com/) API docs, and a React leaderboard. It speaks the **same JSON contract** as the in-classroom [`scoreboard_server.py`](sessions/04-wifi-iot/code/scoreboard_server.py), so the boards switch between cloud and local by changing `SCOREBOARD_HOST` in `secrets.py` — the stdlib server remains the no-internet fallback.
+
 ## Shared hardware
 
 Every session uses the same bench: TinyPICO ESP32, breadboard, 2× LEDs + 330 Ω resistors, 2× momentary switches (blue + yellow caps), buzzer, jumper wires. Session 3's [wiring diagram](sessions/03-sync-async/diagrams/wiring.svg) is the reference build — later sessions reuse it as-is.

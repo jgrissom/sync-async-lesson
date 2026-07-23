@@ -1,0 +1,74 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reaction Game Leaderboard</title>
+<!-- Verbatim copy of the leaderboard page embedded in
+     sessions/04-wifi-iot/code/scoreboard_server.py. It polls the same
+     GET /scores contract, so it works against the stdlib server and the
+     cloud API alike. Kept as the projector fallback if the React app
+     is unavailable. -->
+<style>
+  body { font-family: -apple-system, Helvetica, Arial, sans-serif;
+         text-align: center; background: #111; color: #eee; }
+  h1   { margin-top: 1em; }
+  .crown { font-size: 1.6em; margin: .5em; min-height: 1.4em; }
+  .big { font-size: 2.4em; margin: .2em; }
+  .blue   { color: #7ab8ff; }
+  .yellow { color: #ffd84d; }
+  table { margin: 1.5em auto; border-collapse: collapse; font-size: 1.2em; }
+  th, td { padding: .4em 1em; border-bottom: 1px solid #444; }
+  th { color: #aaa; font-weight: normal; }
+  .note { color: #777; margin-top: 2em; font-size: .9em; }
+  .stale { color: #f66; }
+</style></head>
+<body>
+<h1>Reaction Game — Live Leaderboard</h1>
+<div class="crown" id="crown">&nbsp;</div>
+<div class="big"><span class="blue">Blue <span id="bw">0</span></span>
+&nbsp;:&nbsp;
+<span class="yellow"><span id="yw">0</span> Yellow</span></div>
+<table>
+<thead>
+<tr><th></th><th class="blue">Blue wins</th><th class="blue">false starts</th>
+<th class="yellow">Yellow wins</th><th class="yellow">false starts</th></tr>
+</thead>
+<tbody id="rows"><tr><td colspan="5">Waiting for first update…</td></tr></tbody>
+</table>
+<p class="note" id="status">Live · updates every 1.5 s · POST /result · GET /scores</p>
+<script>
+async function tick() {
+  try {
+    const r = await fetch('/scores');
+    const data = await r.json();
+    const t = data.totals, benches = data.benches;
+    document.getElementById('bw').textContent = t.Blue.wins;
+    document.getElementById('yw').textContent = t.Yellow.wins;
+    document.getElementById('crown').innerHTML =
+      t.Blue.wins === t.Yellow.wins ? "It's a tie!" :
+      (t.Blue.wins > t.Yellow.wins ? "👑 Team Blue leads!"
+                                   : "👑 Team Yellow leads!");
+    const names = Object.keys(benches).sort(
+      (a, b) => a.localeCompare(b, undefined, {numeric: true}));
+    let html = '';
+    for (const b of names) {
+      const e = benches[b];
+      html += `<tr><td>Bench ${b}</td><td>${e.Blue.wins}</td>` +
+              `<td>${e.Blue.false_starts}</td><td>${e.Yellow.wins}</td>` +
+              `<td>${e.Yellow.false_starts}</td></tr>`;
+    }
+    document.getElementById('rows').innerHTML =
+      html || '<tr><td colspan="5">No rounds reported yet…</td></tr>';
+    document.getElementById('status').textContent =
+      'Live · updates every 1.5 s · POST /result · GET /scores';
+    document.getElementById('status').classList.remove('stale');
+  } catch (err) {
+    document.getElementById('status').textContent =
+      'Lost contact with server — retrying…';
+    document.getElementById('status').classList.add('stale');
+  }
+}
+tick();
+setInterval(tick, 1500);
+</script>
+</body></html>
