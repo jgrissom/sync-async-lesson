@@ -33,6 +33,7 @@ Something not working? → **[Troubleshooting & FAQ](../../TROUBLESHOOTING.md)**
 | [`code/secrets_TEMPLATE.py`](code/secrets_TEMPLATE.py) | Copy to `secrets.py`, fill in, upload — **never commit `secrets.py`** |
 | [`code/wifi_connect.py`](code/wifi_connect.py) | Wi-Fi join helper — upload to the board like a library |
 | [`code/async_http.py`](code/async_http.py) | Tiny async HTTP client (GET/POST JSON) — upload like a library |
+| [`code/reaction_game_walkthrough.py`](code/reaction_game_walkthrough.py) | The opening walkthrough's fully-commented-out game — replay the uncomment-predict-run ladder yourself |
 | [`code/reaction_game_BASE.py`](code/reaction_game_BASE.py) | The finished Session 3 reaction game — the known-good base for the network grafts (use your own working game if you prefer) |
 | [Part C's graft sections](lessons/04-part-c-connected-game.md) | The network additions you graft into the game — copyable code blocks, right in the lesson |
 | [`code/web_remote.py`](code/web_remote.py) | Part D: the board serves a control page to your phone |
