@@ -38,7 +38,7 @@ async def fetch_loop():
 ```
 
 > [!TIP]
-> **Do this:** run it and stare at the DotStar through several fetches. No freeze. Same network, same server, same round-trip time — but now the waiting happens inside `await`, so the rainbow keeps every frame. Put A2 and B1 side by side in your head: *that* is the whole session.
+> **Do this:** run it and watch both the DotStar and the shell through several fetches. No freeze — and the starvation detector you added in A2 **goes silent**. Think about what that proves: the fetch still takes the same few hundred milliseconds on the same network to the same server — the *cost didn't change*. What changed is where the waiting happens: inside `await`, where the scheduler can hand the time to the rainbow instead of burning it. Put A2's `>> rainbow starved for 384 ms!` next to B1's quiet shell: *that* is the whole session.
 
 ## B2 — POST: your board changes the world
 

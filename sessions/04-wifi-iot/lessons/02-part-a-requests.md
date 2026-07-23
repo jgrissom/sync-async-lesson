@@ -59,7 +59,7 @@ from machine import Pin, SoftSPI
 import uasyncio as asyncio
 import tinypico as TinyPICO
 from micropython_dotstar import DotStar
-import wifi_connect, secrets
+import wifi_connect, secrets, time
 
 try:
     import urequests as requests
@@ -83,8 +83,15 @@ def wheel(pos):
     return (pos * 3, 0, 255 - pos * 3)
 
 async def rainbow():
+    """Animates -- and MEASURES how long it gets starved between frames."""
     pos = 0
+    last = time.ticks_ms()
     while True:
+        now = time.ticks_ms()
+        gap = time.ticks_diff(now, last)
+        if gap > 100:                  # a frame should come every ~20 ms
+            print("  >> rainbow starved for", gap, "ms!")
+        last = now
         ds[0] = wheel(pos)
         pos = (pos + 2) % 255
         await asyncio.sleep(0.02)
@@ -113,9 +120,15 @@ finally:
 ```
 
 > [!TIP]
-> **Do this:** watch the DotStar. Every four seconds — *freeze*. The rainbow locks solid for the entire network round-trip, because `requests.get()` never yields. It's Session 3's `time.sleep()` disease wearing a networking costume — except now the freeze length is up to the *network*, not you.
+> **Do this:** watch the DotStar *and* the shell. Every fetch, the rainbow locks solid for the whole network round-trip — and even if your eyes miss the stutter on a fast network, the detector doesn't:
+> ```
+> fetching...
+>   >> rainbow starved for 384 ms!
+> Blue wins: 3
+> ```
+> The rainbow task never asked to stop — it was *starved*, because `requests.get()` never yields. It's Session 3's `time.sleep()` disease wearing a networking costume — except now the freeze length is up to the *network*, not you. On a bad network that number is thousands, not hundreds.
 >
-> Imagine this inside your reaction game: every score report would freeze the wait beacon, the buttons, everything. Unacceptable. Part B fixes it.
+> Imagine this inside your reaction game: every score report would freeze the wait beacon, the buttons, everything. Unacceptable. Part B fixes it — keep this starvation number in mind; you're about to watch it vanish.
 
 ## Discussion (5 min)
 
