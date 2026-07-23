@@ -32,7 +32,7 @@ Finish what Part C started: **your** Session 3 reaction game, fully online. Ever
 
 ## Where to work
 
-All the scaffolding is on the [Part C page](../lessons/05-part-c-connected-game.md) — grafts 1–4 and TODOs 1–3, as copyable code blocks. Your game is either your own Session 3 file or [`reaction_game_BASE.py`](../code/reaction_game_BASE.py) — both are fine; grading is identical. Board also needs `secrets.py`, `wifi_connect.py`, and `async_http.py`.
+All the scaffolding is on the [Part C page](../lessons/05-part-c-connected-game.md) — grafts 1–5 and TODOs 1–3, as copyable code blocks, ordered so the game is runnable after every graft. Your game is either your own Session 3 file or [`reaction_game_BASE.py`](../code/reaction_game_BASE.py) — both are fine; grading is identical. Board also needs `secrets.py`, `wifi_connect.py`, and `async_http.py`.
 
 ## Stretch goals (extra credit)
 

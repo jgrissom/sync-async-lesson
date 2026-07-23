@@ -103,6 +103,16 @@ the game students built. The A2→B1 freeze/cure pair is Session 3's
   exactly when the network is worst).
 - Wi-Fi *connection* is done synchronously and the lesson says why —
   reinforces Session 3's "blocking is a choice; sometimes the right one."
+- **Grafts are ordered for testability, not reading order** (reordered
+  2026-07-23, Jeff's call): imports → Wi-Fi connect → report+wiring →
+  standings+wiring → flourish. The original order (connect last, both
+  coroutines batched in one graft, wiring batched in another) left the
+  middle steps untestable — nothing could reach the network until the
+  final graft, and a defined-but-never-called coroutine is only a syntax
+  checkpoint. Now each coroutine lands *with* its call site, Wi-Fi is up
+  from graft 2 on, and every graft ends with a visible "run it" payoff.
+  The instructor bundle's graft-ladder mirrors this order commit-for-
+  commit.
 - **The grafts live in Part C's page, not a starter .py** (changed
   2026-07-23; `game_online_STARTER.py` deleted). Session 3's starter was
   a runnable scaffold filled in-place — a .py was its natural home.
