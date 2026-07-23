@@ -59,6 +59,21 @@ npm run dev
 
 ## Deploy to Azure
 
+One command — creates everything on first run, redeploys on re-run:
+
+```bash
+./deploy.sh <globally-unique-app-name>
+```
+
+It builds the frontend, runs `az webapp up`, sets `httpsOnly=false` +
+app settings (generating and printing a `RESET_KEY` if none exists), and
+finishes with a read-only smoke test. Overrides via env: `LOCATION`
+(default centralus), `SKU` (default F1), `RESET_KEY`, `RESOURCE_GROUP`
+(default rg-iot-scoreboard).
+
+<details>
+<summary>Manual equivalent (what the script runs)</summary>
+
 ```bash
 az login
 
@@ -82,10 +97,16 @@ az webapp config appsettings set -g rg-iot-scoreboard -n <name> \
   --settings RESET_KEY=<pick-a-secret> SCOREBOARD_DB_PATH=/home/scoreboard.db
 ```
 
-SKU note: B1 (~$13/mo, delete the resource group after the course) is the
-safe choice for class night. The F1 free tier works for testing but has a
-daily CPU-minutes quota that a 3.5-hour class of polling boards could
-plausibly exhaust mid-session.
+</details>
+
+SKU note: the F1 free tier handles class night with room to spare — a
+3.5-hour session (projector polling every 1.5 s, 7 boards, 13 phones on
+Scalar) uses under 10% of F1's daily CPU-minutes and bandwidth quotas.
+F1's one real quirk is cold start after ~20 idle minutes, and the
+projector's polling keeps the app warm all evening — just open the
+leaderboard ~10 min before class. If anything ever feels starved,
+scaling up is one command, no redeploy:
+`az appservice plan update -g rg-iot-scoreboard --name <plan> --sku B1`.
 
 ### Verify after deploy (the decisive test)
 
