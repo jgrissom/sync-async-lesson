@@ -159,6 +159,7 @@ app.MapPost("/result", async (HttpRequest request) =>
     Returns the updated entry for that bench. 400 on a malformed body,
     unknown player, or unknown result.
     """)
+.Accepts<ResultBody>("application/json")
 .Produces<Dictionary<string, PlayerScore>>()
 .Produces<ErrorBody>(StatusCodes.Status400BadRequest);
 
@@ -251,6 +252,7 @@ app.MapPost("/register", async (HttpRequest request) =>
     if another bench already has the name you get 409 Conflict — pick a
     better one.
     """)
+.Accepts<RegisterBody>("application/json")
 .Produces<OkBody>()
 .Produces<ErrorBody>(StatusCodes.Status400BadRequest)
 .Produces<ErrorBody>(StatusCodes.Status409Conflict);
@@ -316,6 +318,17 @@ sealed record ScoresBody(
     [property: JsonPropertyName("names")] Dictionary<string, string> Names);
 
 sealed record ErrorBody([property: JsonPropertyName("error")] string Error);
+
+// Request-body shapes for OpenAPI/Scalar only — parsing stays manual so
+// the wire behavior matches the stdlib server exactly.
+sealed record ResultBody(
+    [property: JsonPropertyName("bench")] string Bench,
+    [property: JsonPropertyName("player")] string Player,
+    [property: JsonPropertyName("result")] string Result);
+
+sealed record RegisterBody(
+    [property: JsonPropertyName("bench")] string Bench,
+    [property: JsonPropertyName("name")] string Name);
 
 sealed record OkBody(
     [property: JsonPropertyName("ok")] bool Ok,
