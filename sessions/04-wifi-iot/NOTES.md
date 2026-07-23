@@ -103,3 +103,12 @@ the game students built. The A2→B1 freeze/cure pair is Session 3's
   exactly when the network is worst).
 - Wi-Fi *connection* is done synchronously and the lesson says why —
   reinforces Session 3's "blocking is a choice; sometimes the right one."
+- **The grafts live in Part C's page, not a starter .py** (changed
+  2026-07-23; `game_online_STARTER.py` deleted). Session 3's starter was
+  a runnable scaffold filled in-place — a .py was its natural home.
+  Session 4's "starter" was a donor bank of fragments transplanted into
+  another file, and comment-formatted instructions in a non-runnable .py
+  were the worst medium for that: rendered Markdown with prose between
+  copyable fenced blocks follows better and kills the "do I run this
+  file?" confusion. TODO structure (1–3) and all rationale comments were
+  preserved verbatim in the move.

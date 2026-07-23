@@ -34,7 +34,7 @@ Something not working? → **[Troubleshooting & FAQ](../../TROUBLESHOOTING.md)**
 | [`code/wifi_connect.py`](code/wifi_connect.py) | Wi-Fi join helper — upload to the board like a library |
 | [`code/async_http.py`](code/async_http.py) | Tiny async HTTP client (GET/POST JSON) — upload like a library |
 | [`code/reaction_game_BASE.py`](code/reaction_game_BASE.py) | The finished Session 3 reaction game — the known-good base for the network grafts (use your own working game if you prefer) |
-| [`code/game_online_STARTER.py`](code/game_online_STARTER.py) | The network additions you graft into the game |
+| [Part C's graft sections](lessons/04-part-c-connected-game.md) | The network additions you graft into the game — copyable code blocks, right in the lesson |
 | [`code/web_remote.py`](code/web_remote.py) | Part D: the board serves a control page to your phone |
 | [`code/scoreboard_server.py`](code/scoreboard_server.py) | Single-file twin of the class scoreboard (normal Python 3) — the class instance runs in the cloud ([`scoreboard-cloud/`](../../scoreboard-cloud/)); this one is the offline fallback, and yours to run at home |
 
