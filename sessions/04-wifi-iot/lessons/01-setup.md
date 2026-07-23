@@ -53,17 +53,17 @@ The time is **UTC** — expect it to be offset from wall-clock time here. (Netwo
 
 ## 4. Meet the scoreboard
 
-The class scoreboard is a real cloud API, running on Azure. Three faces of the same server:
+The class scoreboard is a real cloud API, running on Azure at **`false-start.azurewebsites.net`** (a fitting name — you'll meet plenty of those tonight). Three faces of the same server:
 
-- **`https://<SCOREBOARD_HOST>/`** — the live leaderboard on the projector, about to fill up with your rounds.
-- **`https://<SCOREBOARD_HOST>/scalar`** — the API's interactive documentation. Every endpoint your board will use tonight is described here, and you can call them straight from the page.
-- **`http://<SCOREBOARD_HOST>/scores`** — the raw JSON your board will actually read. Open it and look: no magic, just text.
+- **[https://false-start.azurewebsites.net/](https://false-start.azurewebsites.net/)** — the live leaderboard on the projector, about to fill up with your rounds.
+- **[https://false-start.azurewebsites.net/scalar](https://false-start.azurewebsites.net/scalar)** — the API's interactive documentation. Every endpoint your board will use tonight is described here, and you can call them straight from the page.
+- **[http://false-start.azurewebsites.net/scores](http://false-start.azurewebsites.net/scores)** — the raw JSON your board will actually read. Open it and look: no magic, just text.
 
 Your board will talk to that same server — which is the whole point of today: **a web page, a phone, a cloud server, and a microcontroller are all just devices exchanging HTTP.**
 
 ### Name your game 🏷️
 
-Your bench's Session 3 creation deserves a title. On a phone, open **`/scalar`**, find **"Name your game"** (`POST /register`), hit **Test Request**, and send:
+Your bench's Session 3 creation deserves a title. On a phone, open **[false-start.azurewebsites.net/scalar](https://false-start.azurewebsites.net/scalar)**, find **"Name your game"** (`POST /register`), hit **Test Request**, and send:
 
 ```json
 { "bench": "3", "name": "Your Game Title Here" }
