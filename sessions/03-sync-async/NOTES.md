@@ -5,8 +5,8 @@ AI-assistant sessions) don't have to reconstruct it. This file is safe for the
 public repo — it contains no solution code.
 
 **Context:** Session in a six-part Python IoT curriculum. 3.5 hours, intermediate
-Python students, TinyPICO ESP32 + MicroPython in Thonny. Class of ~13, usually
-working in pairs (~7 benches).
+Python students, TinyPICO ESP32 + MicroPython in Thonny. Class of ~13, each
+student on their own board/bench (no board sharing).
 
 ---
 

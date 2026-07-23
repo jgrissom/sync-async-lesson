@@ -174,7 +174,7 @@ The RC filter ignores *fast voltage transitions* — spikes too brief to move th
 </details>
 
 > [!NOTE]
-> **Materials note:** Each group needs one each of `103`, `104`, and `105` caps. With 10 of each value in a standard kit and students working in pairs (~7 groups), that's comfortably enough. If working solo (13 students), have groups share the `105`s since only one is needed at a time per bench.
+> **Materials note:** Each bench needs one each of `103`, `104`, and `105` caps. With 13 solo benches and 10 of each value in a standard kit, have neighbors share the `105`s — only one is needed at a time per bench.
 
 ---
 

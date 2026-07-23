@@ -15,5 +15,6 @@ WIFI_PASSWORD = ""        # "" (empty) for an open / registered guest network
 SCOREBOARD_HOST = "false-start.azurewebsites.net"
 SCOREBOARD_PORT = 80
 
-# Your bench number ("1" through "7") -- ask if unsure
+# Your bench number ("1" through "13") -- one per student, it's how
+# the leaderboard tells your board's results apart. Ask if unsure.
 BENCH = "1"

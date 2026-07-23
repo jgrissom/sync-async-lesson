@@ -6,7 +6,7 @@
 
 ---
 
-Finish what Part C started: **your** Session 3 reaction game, fully online. Every round reports to the class scoreboard, standings print between rounds, and the game shrugs off network failures. Work at your Session 3 bench pairing.
+Finish what Part C started: **your** Session 3 reaction game, fully online. Every round reports to the class scoreboard, standings print between rounds, and the game shrugs off network failures. Work solo on your own board, under your own bench number.
 
 ## What the finished game does
 
