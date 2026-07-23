@@ -41,16 +41,18 @@ Expected output ends with `Connected! IP address: 10.x.x.x`. That IP is your boa
 
 ## 3. Your board knows what time it is
 
-The board has no battery-backed clock — it boots thinking it's the year 2000. See for yourself, then fix it with one tiny protocol — your first taste of the board using the internet:
+The board has no battery-backed clock — on its own, it boots thinking it's the year 2000. Check what it thinks right now, then ask the internet:
 
 ```python
 import ntptime, time
-print(time.localtime())    # (2000, 1, 1, ...) -- the board has no idea
+print(time.localtime())    # probably right... but WHO set it?
 ntptime.settime()          # asks an internet time server (NTP)
-print(time.localtime())    # the real date and time
+print(time.localtime())    # now set by the board itself, from the internet
 ```
 
-The corrected time is **UTC** — expect it to be offset from wall-clock time here. (If the *first* print already shows a real date, your board's clock was set earlier and survives soft resets — unplug and replug the USB cable to watch the amnesia happen. And on a network without internet, `settime()` fails with a timeout — that's fine, nothing today depends on it.)
+Surprise: the first print is (probably) already correct — because **Thonny silently sets the board's clock from your laptop every time it connects**. Your board isn't keeping time; it's being spoon-fed through the USB cable. Then watch the second print *jump*: NTP sets **UTC**, so the shift you see is exactly your timezone offset — proof that two different sources just wrote to the clock.
+
+Why this matters: a deployed board has no laptop attached. NTP is how a device gets the time *on its own* — which is the whole IoT posture in miniature. (Power the board from a plain USB charger sometime and print `time.localtime()` — there's your year 2000. And on a network without internet, `settime()` fails with a timeout; that's fine, nothing today depends on it.)
 
 ## 4. Meet the scoreboard
 
