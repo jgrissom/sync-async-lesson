@@ -12,22 +12,20 @@ Build a two-player reaction game that ties everything together. Work individuall
 
 1. On start, the DotStar and the **red LED blink red together** — the wait phase. Players hover, fingers ready.
 2. After a **random delay of 2–5 seconds**, the blinking stops: the DotStar turns **solid green** and LED 2 (the green LED) lights — this is the "GO" signal.
-3. The **first player to press** their button after GO wins: sound the buzzer and flash the DotStar the winner's **cap color** — Player Blue's button has the blue cap, Player Yellow's the yellow cap, and the DotStar flashes that exact color. (Red and green are deliberately reserved: red always means *wait/lose*, green always means *GO*.)
+3. The **first player to press** their button after GO wins: sound the buzzer and flash the DotStar the winner's **cap color** — Player Blue's button has the blue cap, Player Yellow's the yellow cap, and the DotStar flashes that exact color. (Red and green are deliberately reserved: red always means _wait/lose_, green always means _GO_.)
 4. If a player presses **before** the green GO signal (a **false start**), they lose immediately — flash the DotStar red and buzz twice.
 5. After a result, wait 3 seconds, then reset for another round automatically.
 
 ## Requirements (grading rubric)
 
-| #   | Requirement                                                                                             | Points |
-| --- | ------------------------------------------------------------------------------------------------------- | ------ |
-| 1   | Program uses `uasyncio` with at least two concurrent tasks (no blocking `time.sleep` in the main logic) | 25     |
-| 2   | Random 2–5 s delay before GO (use the `random` module)                                                  | 15     |
-| 3   | Correctly detects the first button pressed after GO and names the winner                                | 20     |
-| 4   | False-start detection: pressing before GO loses                                                         | 15     |
-| 5   | DotStar and buzzer feedback for win, loss, and false start                                              | 15     |
-| 6   | Buttons are debounced; no double-triggers                                                               | 10     |
-
-**Total: 100 points.**
+| #   | Requirement                                                                                             |
+| --- | ------------------------------------------------------------------------------------------------------- |
+| 1   | Program uses `uasyncio` with at least two concurrent tasks (no blocking `time.sleep` in the main logic) |
+| 2   | Random 2–5 s delay before GO (use the `random` module)                                                  |
+| 3   | Correctly detects the first button pressed after GO and names the winner                                |
+| 4   | False-start detection: pressing before GO loses                                                         |
+| 5   | DotStar and buzzer feedback for win, loss, and false start                                              |
+| 6   | Buttons are debounced; no double-triggers                                                               |
 
 ## Starter scaffold
 
@@ -121,7 +119,7 @@ finally:
 
 ## Stretch goals (extra credit)
 
-- Make the wait beacon *pulse* smoothly via PWM instead of blinking on/off (and dim the GO LED to a comfortable brightness while you're at it).
+- Make the wait beacon _pulse_ smoothly via PWM instead of blinking on/off (and dim the GO LED to a comfortable brightness while you're at it).
 - Track and print a running best reaction time using `time.ticks_ms()` / `time.ticks_diff()`.
 - Best-of-three match: first player to win 2 rounds gets a victory animation on the DotStar.
 
