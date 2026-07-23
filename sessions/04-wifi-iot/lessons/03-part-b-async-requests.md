@@ -38,7 +38,10 @@ async def fetch_loop():
 ```
 
 > [!TIP]
-> **Do this:** run it and watch both the DotStar and the shell through several fetches. No freeze — and the starvation detector you added in A2 **goes silent**. Think about what that proves: the fetch still takes the same few hundred milliseconds on the same network to the same server — the *cost didn't change*. What changed is where the waiting happens: inside `await`, where the scheduler can hand the time to the rainbow instead of burning it. Put A2's `>> rainbow starved for 384 ms!` next to B1's quiet shell: *that* is the whole session.
+> **Do this:** run it and watch both the DotStar and the shell through several fetches. The starvation detector from A2 goes **almost** silent: most fetches starve nothing at all, and the fetch still takes the same few hundred milliseconds on the same network to the same server — the *cost didn't change*. What changed is where the waiting happens: inside `await`, where the scheduler hands the time to the rainbow instead of burning it. Put A2's `>> rainbow starved for 384 ms!` on every fetch next to B1's near-quiet shell: *that* is the whole session.
+
+> [!NOTE]
+> **Why "almost"?** Watch long enough and you'll catch a rare, brief blip (~100–200 ms). That's the one wait this client *can't* turn into an `await`: turning the server's **name** into an **address**. `asyncio.open_connection()` does the DNS lookup with a plain blocking call — MicroPython has no async DNS — and the board caches the answer, so you only pay it when the cache is cold or expired. Skim [`async_http.py`](../code/async_http.py) and find the guilty line. Knowing exactly which waits yield and which can't is the difference between "it works" and "I know why it works."
 
 ## B2 — POST: your board changes the world
 
