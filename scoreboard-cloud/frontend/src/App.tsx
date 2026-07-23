@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react'
 // classroom server and the cloud API. See GET /scores in either.
 type PlayerScore = { wins: number; false_starts: number }
 type BenchEntry = { Blue: PlayerScore; Yellow: PlayerScore }
-type Scores = { benches: Record<string, BenchEntry>; totals: BenchEntry }
+type Scores = {
+  benches: Record<string, BenchEntry>
+  totals: BenchEntry
+  // Cloud-only additive key: game titles from POST /register.
+  // Absent when polling the classroom stdlib server — always optional.
+  names?: Record<string, string>
+}
 
 const POLL_MS = 1500
 
@@ -83,7 +89,7 @@ export default function App() {
               const e = scores.benches[b]
               return (
                 <tr key={b}>
-                  <td>Bench {b}</td>
+                  <td className="game">{scores.names?.[b] ?? `Bench ${b}`}</td>
                   <td>{e.Blue.wins}</td>
                   <td>{e.Blue.false_starts}</td>
                   <td>{e.Yellow.wins}</td>

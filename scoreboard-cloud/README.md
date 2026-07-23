@@ -13,7 +13,7 @@ on Azure turns the risky board→laptop hop into a safe board→internet one.
 
 | Piece | Where | Serves |
 |---|---|---|
-| .NET 10 minimal API + SQLite | `Scoreboard.Api/` | `POST /result`, `GET /scores`, `GET /scores/{bench}`, keyed `GET /reset` |
+| .NET 10 minimal API + SQLite | `Scoreboard.Api/` | `POST /result`, `GET /scores`, `GET /scores/{bench}`, `POST /register`, keyed `GET /reset` |
 | Scalar API docs | built from OpenAPI | `/scalar` |
 | React leaderboard (Vite + TS) | `frontend/` → builds into `Scoreboard.Api/wwwroot/app/` | `/` (redirects to `/app/`) |
 | Classic leaderboard page | `Scoreboard.Api/wwwroot/classic/` | `/classic/` (projector fallback) |
@@ -23,6 +23,15 @@ spellings, status codes) is verified byte-compatible against the stdlib
 server, including the raw HTTP/1.0 `Connection: close` requests that
 `async_http.py` sends. **If you change a route or shape, change the stdlib
 server to match** — the two must stay interchangeable.
+
+**Game names (cloud-only, additive):** benches can title their game —
+`POST /register` `{"bench": "3", "name": "Jeff's Sweet Game"}` (40-char
+max, re-register to rename). `GET /scores` then carries an extra
+`"names": {...}` key, which the React leaderboard renders and everything
+else (boards, classic page, stdlib server) safely ignores. Unregistered
+benches display as "Bench 3". `/reset` keeps names. Classroom ritual:
+students register from their phones via the Scalar docs page — their first
+hand-made API call, and their game title pops onto the projector.
 
 ## Config
 

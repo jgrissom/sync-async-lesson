@@ -55,6 +55,14 @@ th {
   font-weight: normal;
 }
 
+td.game {
+  text-align: left;
+  max-width: 14em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .note {
   color: #777;
   margin-top: 2em;

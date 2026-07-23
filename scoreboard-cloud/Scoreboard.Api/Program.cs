@@ -48,6 +48,10 @@ using (var conn = new SqliteConnection(connectionString))
             false_starts INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY (bench, player)
         );
+        CREATE TABLE IF NOT EXISTS bench_names (
+            bench TEXT PRIMARY KEY,
+            name  TEXT NOT NULL
+        );
         """;
     create.ExecuteNonQuery();
 }
@@ -70,6 +74,19 @@ Dictionary<string, Dictionary<string, PlayerScore>> LoadBenches()
         entry[reader.GetString(1)] = new PlayerScore(reader.GetInt32(2), reader.GetInt32(3));
     }
     return benches;
+}
+
+Dictionary<string, string> LoadNames()
+{
+    var names = new Dictionary<string, string>();
+    using var conn = new SqliteConnection(connectionString);
+    conn.Open();
+    var cmd = conn.CreateCommand();
+    cmd.CommandText = "SELECT bench, name FROM bench_names ORDER BY rowid";
+    using var reader = cmd.ExecuteReader();
+    while (reader.Read())
+        names[reader.GetString(0)] = reader.GetString(1);
+    return names;
 }
 
 Dictionary<string, PlayerScore> Totals(Dictionary<string, Dictionary<string, PlayerScore>> benches)
@@ -144,13 +161,65 @@ app.MapPost("/result", async (HttpRequest request) =>
 app.MapGet("/scores", () =>
 {
     var benches = LoadBenches();
-    return Results.Json(new ScoresBody(benches, Totals(benches)));
+    return Results.Json(new ScoresBody(benches, Totals(benches), LoadNames()));
 })
 .WithSummary("All benches + class totals")
 .WithDescription("""
     Boards call this between rounds; the leaderboard pages poll it every
     1.5 s. Shape: {"benches": {"3": {"Blue": {"wins": 1, "false_starts": 0},
-    ...}, ...}, "totals": {"Blue": {...}, "Yellow": {...}}}
+    ...}, ...}, "totals": {"Blue": {...}, "Yellow": {...}},
+    "names": {"3": "Jeff's Sweet Game", ...}}. The "names" key is additive
+    relative to the classroom stdlib server — boards and the classic page
+    ignore it.
+    """);
+
+app.MapPost("/register", async (HttpRequest request) =>
+{
+    const int MaxName = 40;
+    string bench, name;
+    try
+    {
+        var payload = await JsonNode.ParseAsync(request.Body)
+                      ?? throw new FormatException("empty body");
+        bench = (payload["bench"] ?? throw new FormatException("'bench'")).ToString();
+        name = (payload["name"] ?? throw new FormatException("'name'")).ToString().Trim();
+        if (name.Length == 0)
+            throw new FormatException("name is empty");
+        if (name.Length > MaxName)
+            throw new FormatException($"name too long (max {MaxName} chars)");
+    }
+    catch (Exception exc) when (exc is FormatException or System.Text.Json.JsonException)
+    {
+        return Results.Json(new ErrorBody($"bad request: {exc.Message}"), statusCode: 400);
+    }
+
+    using var conn = new SqliteConnection(connectionString);
+    conn.Open();
+    using var tx = conn.BeginTransaction();
+    // Make the bench visible on the leaderboard immediately (zero scores),
+    // so a freshly named game shows up within one poll.
+    var ensure = conn.CreateCommand();
+    ensure.Transaction = tx;
+    ensure.CommandText = """
+        INSERT OR IGNORE INTO scores (bench, player) VALUES ($bench, 'Blue');
+        INSERT OR IGNORE INTO scores (bench, player) VALUES ($bench, 'Yellow');
+        INSERT INTO bench_names (bench, name) VALUES ($bench, $name)
+            ON CONFLICT(bench) DO UPDATE SET name = excluded.name;
+        """;
+    ensure.Parameters.AddWithValue("$bench", bench);
+    ensure.Parameters.AddWithValue("$name", name);
+    ensure.ExecuteNonQuery();
+    tx.Commit();
+
+    Console.WriteLine($"  bench {bench} registered as \"{name}\"");
+    return Results.Json(new OkBody(true, $"bench {bench} registered as \"{name}\""));
+})
+.WithSummary("Name your game")
+.WithDescription("""
+    Give your bench's game a title for the leaderboard, e.g.
+    {"bench": "3", "name": "Jeff's Sweet Game"}. Registering is optional —
+    unnamed benches show as "Bench 3". Re-register any time to rename
+    (last write wins). Max 40 characters.
     """);
 
 app.MapGet("/scores/{bench}", (string bench) =>
@@ -181,7 +250,9 @@ app.MapGet("/reset", (string? key, IConfiguration config) =>
 })
 .WithSummary("Reset the scoreboard (instructor only)")
 .WithDescription("Requires ?key= matching the RESET_KEY app setting. " +
-                 "With no RESET_KEY configured, reset is disabled.");
+                 "With no RESET_KEY configured, reset is disabled. Wipes " +
+                 "scores only — registered game names are kept and reattach " +
+                 "when a bench next appears.");
 
 app.MapGet("/", () => Results.Redirect("/app/")).ExcludeFromDescription();
 
@@ -204,7 +275,8 @@ sealed record PlayerScore(
 
 sealed record ScoresBody(
     [property: JsonPropertyName("benches")] Dictionary<string, Dictionary<string, PlayerScore>> Benches,
-    [property: JsonPropertyName("totals")] Dictionary<string, PlayerScore> Totals);
+    [property: JsonPropertyName("totals")] Dictionary<string, PlayerScore> Totals,
+    [property: JsonPropertyName("names")] Dictionary<string, string> Names);
 
 sealed record ErrorBody([property: JsonPropertyName("error")] string Error);
 
