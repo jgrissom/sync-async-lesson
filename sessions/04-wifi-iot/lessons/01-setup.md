@@ -1,6 +1,6 @@
 # Warm-up: Getting on the Network
 
-⏱️ **35 min**
+⏱️ **25 min**
 
 [← Overview](00-overview.md) · [Session home](../README.md) · **Next:** [Part A — Talking HTTP →](02-part-a-requests.md)
 

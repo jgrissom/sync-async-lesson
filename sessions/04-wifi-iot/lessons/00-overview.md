@@ -10,8 +10,8 @@ Session 3's reaction game becomes a connected device: every round's result is PO
 
 | Block | Activity | Time |
 |---|---|---|
-| Review | Session 3 assignment — live-code the solution from the starter | 10 min |
-| Warm-up | Join the Wi-Fi, `secrets.py`, NTP time | 30 min |
+| Review | Session 3 assignment — guided walkthrough of the solution | 15 min |
+| Warm-up | Join the Wi-Fi, `secrets.py`, NTP time | 25 min |
 | Part A | HTTP + JSON with blocking `urequests` — feel the freeze | 35 min |
 | Break | Stretch / troubleshoot | 10 min |
 | Part B | Async requests — GET and POST without freezing | 40 min |
