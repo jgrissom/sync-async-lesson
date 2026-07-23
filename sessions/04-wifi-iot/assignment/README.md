@@ -18,8 +18,8 @@ Finish what Part C started: **your** Session 3 reaction game, fully online. Ever
 
 ## Requirements (grading rubric)
 
-| #   | Requirement                                                                                                                                                        | Points |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| #   | Requirement                                                                                                                                                        |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 1   | Connects to Wi-Fi at startup with a clear success/failure message                                                                                                  |
 | 2   | Game plays flawlessly with networking active — wait beacon stays smooth while requests are in flight (async only; no blocking `urequests` inside the running game) |
 | 3   | Every win and false start POSTed with correct bench, player, and result — visible on the class leaderboard                                                         |
