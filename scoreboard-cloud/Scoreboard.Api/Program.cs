@@ -52,6 +52,8 @@ using (var conn = new SqliteConnection(connectionString))
             bench TEXT PRIMARY KEY,
             name  TEXT NOT NULL
         );
+        CREATE UNIQUE INDEX IF NOT EXISTS ux_bench_names_name
+            ON bench_names (name COLLATE NOCASE);
         """;
     create.ExecuteNonQuery();
 }
@@ -156,7 +158,9 @@ app.MapPost("/result", async (HttpRequest request) =>
       {"bench": "3", "player": "Yellow", "result": "false_start"}
     Returns the updated entry for that bench. 400 on a malformed body,
     unknown player, or unknown result.
-    """);
+    """)
+.Produces<Dictionary<string, PlayerScore>>()
+.Produces<ErrorBody>(StatusCodes.Status400BadRequest);
 
 app.MapGet("/scores", () =>
 {
@@ -171,7 +175,8 @@ app.MapGet("/scores", () =>
     "names": {"3": "Jeff's Sweet Game", ...}}. The "names" key is additive
     relative to the classroom stdlib server — boards and the classic page
     ignore it.
-    """);
+    """)
+.Produces<ScoresBody>();
 
 app.MapPost("/register", async (HttpRequest request) =>
 {
@@ -196,6 +201,21 @@ app.MapPost("/register", async (HttpRequest request) =>
     using var conn = new SqliteConnection(connectionString);
     conn.Open();
     using var tx = conn.BeginTransaction();
+
+    // Names are unique class-wide (case-insensitive). A bench re-sending
+    // its own name is a rename-to-self, not a conflict.
+    var holder = conn.CreateCommand();
+    holder.Transaction = tx;
+    holder.CommandText = """
+        SELECT bench FROM bench_names
+        WHERE name = $name COLLATE NOCASE AND bench <> $bench LIMIT 1
+        """;
+    holder.Parameters.AddWithValue("$bench", bench);
+    holder.Parameters.AddWithValue("$name", name);
+    if (holder.ExecuteScalar() is string taken)
+        return Results.Json(new ErrorBody($"name already taken by bench {taken}"),
+                            statusCode: 409);
+
     // Make the bench visible on the leaderboard immediately (zero scores),
     // so a freshly named game shows up within one poll.
     var ensure = conn.CreateCommand();
@@ -208,8 +228,16 @@ app.MapPost("/register", async (HttpRequest request) =>
         """;
     ensure.Parameters.AddWithValue("$bench", bench);
     ensure.Parameters.AddWithValue("$name", name);
-    ensure.ExecuteNonQuery();
-    tx.Commit();
+    try
+    {
+        ensure.ExecuteNonQuery();
+        tx.Commit();
+    }
+    catch (SqliteException)
+    {
+        // Unique-index backstop for two benches racing for the same name.
+        return Results.Json(new ErrorBody("name already taken"), statusCode: 409);
+    }
 
     Console.WriteLine($"  bench {bench} registered as \"{name}\"");
     return Results.Json(new OkBody(true, $"bench {bench} registered as \"{name}\""));
@@ -218,9 +246,14 @@ app.MapPost("/register", async (HttpRequest request) =>
 .WithDescription("""
     Give your bench's game a title for the leaderboard, e.g.
     {"bench": "3", "name": "Jeff's Sweet Game"}. Registering is optional —
-    unnamed benches show as "Bench 3". Re-register any time to rename
-    (last write wins). Max 40 characters.
-    """);
+    unnamed benches show as "Bench 3". Re-register any time to rename.
+    Max 40 characters. Names are unique class-wide (case-insensitive):
+    if another bench already has the name you get 409 Conflict — pick a
+    better one.
+    """)
+.Produces<OkBody>()
+.Produces<ErrorBody>(StatusCodes.Status400BadRequest)
+.Produces<ErrorBody>(StatusCodes.Status409Conflict);
 
 app.MapGet("/scores/{bench}", (string bench) =>
 {
@@ -229,7 +262,9 @@ app.MapGet("/scores/{bench}", (string bench) =>
         ? Results.Json(entry)
         : Results.Json(new ErrorBody($"unknown bench {bench}"), statusCode: 404);
 })
-.WithSummary("One bench's scores");
+.WithSummary("One bench's scores")
+.Produces<Dictionary<string, PlayerScore>>()
+.Produces<ErrorBody>(StatusCodes.Status404NotFound);
 
 app.MapGet("/reset", (string? key, IConfiguration config) =>
 {
@@ -252,7 +287,9 @@ app.MapGet("/reset", (string? key, IConfiguration config) =>
 .WithDescription("Requires ?key= matching the RESET_KEY app setting. " +
                  "With no RESET_KEY configured, reset is disabled. Wipes " +
                  "scores only — registered game names are kept and reattach " +
-                 "when a bench next appears.");
+                 "when a bench next appears.")
+.Produces<OkBody>()
+.Produces<ErrorBody>(StatusCodes.Status403Forbidden);
 
 app.MapGet("/", () => Results.Redirect("/app/")).ExcludeFromDescription();
 

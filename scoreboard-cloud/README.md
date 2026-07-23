@@ -26,7 +26,11 @@ server to match** — the two must stay interchangeable.
 
 **Game names (cloud-only, additive):** benches can title their game —
 `POST /register` `{"bench": "3", "name": "Jeff's Sweet Game"}` (40-char
-max, re-register to rename). `GET /scores` then carries an extra
+max, re-register to rename). Names are unique class-wide,
+case-insensitively — a taken name returns **409 Conflict** naming the
+holder, while a bench re-sending its own name is a no-op 200. Between
+that, 400 (bad body), 403 (reset key), and 404 (unknown bench), the API
+doubles as a live status-code tour in Scalar. `GET /scores` carries an extra
 `"names": {...}` key, which the React leaderboard renders and everything
 else (boards, classic page, stdlib server) safely ignores. Unregistered
 benches display as "Bench 3". `/reset` keeps names. Classroom ritual:
