@@ -6,7 +6,7 @@
 
 ---
 
-Time to connect the thing you actually care about. You'll graft networking onto **your own** finished reaction game from Session 3 — open your `reaction_game_<yourname>.py` next to [`game_online_STARTER.py`](../code/game_online_STARTER.py), which contains every piece with instructions for where it goes.
+Time to connect the thing you actually care about: the reaction game. Your starting point is a **known-good finished game** — either your own `reaction_game_<yourname>.py` from Session 3 (if it plays flawlessly), or [`reaction_game_BASE.py`](../code/reaction_game_BASE.py), the same file the instructor live-coded in the opening review. Open it next to [`game_online_STARTER.py`](../code/game_online_STARTER.py), which contains every network piece with instructions for where it goes.
 
 The plan, in the language of B3:
 
@@ -27,7 +27,7 @@ Work through `game_online_STARTER.py` top to bottom — it's organized as four g
 > **Test as you graft** (Session 3 habit, same reason): after GRAFT 2 + TODO 1, play one round and watch the projector — your bench's row should tick up. Then add TODO 2 and confirm standings print between rounds. Then the flourish. If a stage breaks, the fault is in the piece you just added.
 
 > [!NOTE]
-> **Sanity check before you start:** the game itself must still be flawless. If your Session 3 game has a lingering bug, fix that first — networking grafted onto a broken game debugs like a nightmare, because every symptom has two suspects.
+> **Sanity check before you start:** the game itself must be flawless *before* the first graft — networking grafted onto a broken game debugs like a nightmare, because every symptom has two suspects. If your Session 3 game has any lingering quirk, don't fix it on the clock: start from [`reaction_game_BASE.py`](../code/reaction_game_BASE.py). That's what it's for.
 
 ## The moment worth noticing
 

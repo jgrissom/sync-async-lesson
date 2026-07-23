@@ -87,10 +87,16 @@ the game students built. The A2→B1 freeze/cure pair is Session 3's
 
 ## Pedagogy notes
 
-- Part C **grafts onto each student's own Session 3 game** rather than
-  shipping a complete game in the repo — a complete base game would leak
-  the Session 3 solution publicly. Students without their file get the
-  instructor solution privately (answer key notes this).
+- Part C grafts onto a **known-good finished game** —
+  `reaction_game_BASE.py` (the Session 3 solution, published) or the
+  student's own file if it plays flawlessly. **Reversed 2026-07-23**: the
+  original design withheld the base to protect Session 3's assignment
+  from look-ahead, at the cost of grafting onto 13 divergent,
+  possibly-buggy files ("every symptom has two suspects"). Decision:
+  these are paying adults — support simplicity and debugging sanity beat
+  solution secrecy. The instructor bundle's copy remains the grading
+  reference; a future course run that wants secrecy back just deletes
+  the BASE file and restores the private-handoff flow.
 - `await` vs `create_task()` (B3's table) is the session's conceptual
   centerpiece: report = fire-and-forget, standings = awaited, and the
   rubric penalizes awaiting the report (it parks the game on timeouts
