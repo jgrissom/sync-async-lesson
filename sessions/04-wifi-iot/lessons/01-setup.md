@@ -41,15 +41,16 @@ Expected output ends with `Connected! IP address: 10.x.x.x`. That IP is your boa
 
 ## 3. Your board knows what time it is
 
-The board has no battery-backed clock — it boots thinking it's the year 2000. One tiny protocol fixes that, and it's your first taste of the board using the internet:
+The board has no battery-backed clock — it boots thinking it's the year 2000. See for yourself, then fix it with one tiny protocol — your first taste of the board using the internet:
 
 ```python
 import ntptime, time
+print(time.localtime())    # (2000, 1, 1, ...) -- the board has no idea
 ntptime.settime()          # asks an internet time server (NTP)
-print(time.localtime())    # (year, month, day, hour, min, sec, ...)
+print(time.localtime())    # the real date and time
 ```
 
-The time is **UTC** — expect it to be offset from wall-clock time here. (Networks without internet access will fail this step with a timeout — that's fine, nothing today depends on it.)
+The corrected time is **UTC** — expect it to be offset from wall-clock time here. (If the *first* print already shows a real date, your board's clock was set earlier and survives soft resets — unplug and replug the USB cable to watch the amnesia happen. And on a network without internet, `settime()` fails with a timeout — that's fine, nothing today depends on it.)
 
 ## 4. Meet the scoreboard
 
