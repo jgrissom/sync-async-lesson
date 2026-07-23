@@ -186,7 +186,9 @@ app.MapGet("/reset", (string? key, IConfiguration config) =>
 app.MapGet("/", () => Results.Redirect("/app/")).ExcludeFromDescription();
 
 app.MapOpenApi();
-app.MapScalarApiReference(options => options.WithTitle("Reaction-Game Scoreboard API"));
+app.MapScalarApiReference(options => options
+    .WithTitle("Reaction-Game Scoreboard API")
+    .WithDarkMode(true));
 
 // Anything unmatched gets the stdlib server's 404 shape.
 app.MapFallback(() => Results.Json(new ErrorBody("no such route"), statusCode: 404))
