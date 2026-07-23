@@ -15,7 +15,7 @@ on Azure turns the risky board→laptop hop into a safe board→internet one.
 |---|---|---|
 | .NET 10 minimal API + SQLite | `Scoreboard.Api/` | `POST /result`, `GET /scores`, `GET /scores/{bench}`, `POST /register`, keyed `GET /reset` |
 | Scalar API docs | built from OpenAPI | `/scalar` |
-| React leaderboard (Vite + TS) | `frontend/` → builds into `Scoreboard.Api/wwwroot/app/` | `/` (redirects to `/app/`) |
+| React leaderboard (Vite + TS) | `frontend/` → builds into `Scoreboard.Api/wwwroot/app/` | `/` (redirects to `/app/`) — fires team-colored confetti on new wins (poll-diff; per-team burst sized by wins gained, so simultaneous wins mix proportionally) |
 | Classic leaderboard page | `Scoreboard.Api/wwwroot/classic/` | `/classic/` (projector fallback) |
 
 One app, one origin — no CORS anywhere. The contract (routes, JSON key

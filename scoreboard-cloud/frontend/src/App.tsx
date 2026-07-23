@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import confetti from 'canvas-confetti'
 
 // Shapes come from the scoreboard contract — identical between the stdlib
 // classroom server and the cloud API. See GET /scores in either.
@@ -14,9 +15,37 @@ type Scores = {
 
 const POLL_MS = 1500
 
+// One burst per team per poll, sized by how many wins that team gained in
+// the window. A lone blue win is a solid blue burst; simultaneous wins mix
+// in proportion. Each team celebrates from its own side of the header.
+const CONFETTI = {
+  Blue: { color: '#7ab8ff', x: 0.25 },
+  Yellow: { color: '#ffd84d', x: 0.75 },
+} as const
+
+// Main-thread renderer: the default export renders from a web worker via
+// OffscreenCanvas, which headless browsers (tests/screenshots) fail to
+// capture. At our particle counts the main thread doesn't notice.
+const burst = confetti.create(undefined, { resize: true, useWorker: false })
+
+function celebrate(deltas: { Blue: number; Yellow: number }) {
+  for (const team of ['Blue', 'Yellow'] as const) {
+    const wins = deltas[team]
+    if (wins <= 0) continue // increments only: /reset stays silent
+    burst({
+      particleCount: Math.min(80 * wins, 240),
+      spread: 70,
+      startVelocity: 45,
+      origin: { x: CONFETTI[team].x, y: 0.6 },
+      colors: [CONFETTI[team].color, '#ffffff'],
+    })
+  }
+}
+
 export default function App() {
   const [scores, setScores] = useState<Scores | null>(null)
   const [stale, setStale] = useState(false)
+  const prevTotals = useRef<BenchEntry | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -26,6 +55,16 @@ export default function App() {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         const data: Scores = await r.json()
         if (!cancelled) {
+          // Diff against the previous poll; never fire on the first one,
+          // so opening the page mid-game doesn't celebrate stale wins.
+          const prev = prevTotals.current
+          if (prev) {
+            celebrate({
+              Blue: data.totals.Blue.wins - prev.Blue.wins,
+              Yellow: data.totals.Yellow.wins - prev.Yellow.wins,
+            })
+          }
+          prevTotals.current = data.totals
           setScores(data)
           setStale(false)
         }
