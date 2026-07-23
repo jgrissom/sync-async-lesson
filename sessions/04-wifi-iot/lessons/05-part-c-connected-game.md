@@ -2,7 +2,7 @@
 
 ⏱️ **30 min** *(flows directly into the graded assignment)*
 
-[← Part B](03-part-b-async-requests.md) · [Session home](../README.md) · **Next:** [Part D — Web Server →](05-part-d-web-server.md)
+[← Part B](04-part-b-async-requests.md) · [Session home](../README.md) · **Next:** [Part D — Web Server →](06-part-d-web-server.md)
 
 ---
 
@@ -134,4 +134,4 @@ Finish the TODOs in the [graded assignment →](../assignment/README.md)
 
 ---
 
-[← Part B](03-part-b-async-requests.md) · [Session home](../README.md) · **Next:** [Part D — Web Server →](05-part-d-web-server.md)
+[← Part B](04-part-b-async-requests.md) · [Session home](../README.md) · **Next:** [Part D — Web Server →](06-part-d-web-server.md)

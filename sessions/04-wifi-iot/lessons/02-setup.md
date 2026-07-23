@@ -2,7 +2,7 @@
 
 ⏱️ **25 min**
 
-[← Overview](00-overview.md) · [Session home](../README.md) · **Next:** [Part A — Talking HTTP →](02-part-a-requests.md)
+[← Opening Walkthrough](01-walkthrough.md) · [Session home](../README.md) · **Next:** [Part A — Talking HTTP →](03-part-a-requests.md)
 
 ---
 
@@ -79,4 +79,4 @@ with your bench number and your title (40 characters max). A `200` means it's yo
 
 ---
 
-[← Overview](00-overview.md) · [Session home](../README.md) · **Next:** [Part A — Talking HTTP →](02-part-a-requests.md)
+[← Opening Walkthrough](01-walkthrough.md) · [Session home](../README.md) · **Next:** [Part A — Talking HTTP →](03-part-a-requests.md)

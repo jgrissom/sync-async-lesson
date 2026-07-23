@@ -16,12 +16,13 @@ Last session you built a two-player reaction game and learned why `await` beats 
 ## Lesson navigation
 
 1. [Session Overview & Timing](lessons/00-overview.md)
-2. [Warm-up: Getting on the Network](lessons/01-setup.md) — *25 min*
-3. [Part A — Talking HTTP (the blocking way)](lessons/02-part-a-requests.md) — *35 min*
-4. [Part B — Async Requests](lessons/03-part-b-async-requests.md) — *40 min*
-5. [Part C — Your Game Goes Online](lessons/04-part-c-connected-game.md) — *30 min*
-6. [Part D — Your Board as a Web Server (optional)](lessons/05-part-d-web-server.md) — *bonus*
-7. [Assignment — The Connected Reaction Game](assignment/README.md) — *45 min, graded*
+2. [Opening Walkthrough — How the Reaction Game Works](lessons/01-walkthrough.md) — *15 min*
+3. [Warm-up: Getting on the Network](lessons/02-setup.md) — *25 min*
+4. [Part A — Talking HTTP (the blocking way)](lessons/03-part-a-requests.md) — *35 min*
+5. [Part B — Async Requests](lessons/04-part-b-async-requests.md) — *40 min*
+6. [Part C — Your Game Goes Online](lessons/05-part-c-connected-game.md) — *30 min*
+7. [Part D — Your Board as a Web Server (optional)](lessons/06-part-d-web-server.md) — *bonus*
+8. [Assignment — The Connected Reaction Game](assignment/README.md) — *45 min, graded*
 
 Something not working? → **[Troubleshooting & FAQ](../../TROUBLESHOOTING.md)** — now with a Wi-Fi & network section.
 
@@ -35,7 +36,7 @@ Something not working? → **[Troubleshooting & FAQ](../../TROUBLESHOOTING.md)**
 | [`code/async_http.py`](code/async_http.py) | Tiny async HTTP client (GET/POST JSON) — upload like a library |
 | [`code/reaction_game_walkthrough.py`](code/reaction_game_walkthrough.py) | The opening walkthrough's fully-commented-out game — replay the uncomment-predict-run ladder yourself |
 | [`code/reaction_game_BASE.py`](code/reaction_game_BASE.py) | The finished Session 3 reaction game — the known-good base for the network grafts (use your own working game if you prefer) |
-| [Part C's graft sections](lessons/04-part-c-connected-game.md) | The network additions you graft into the game — copyable code blocks, right in the lesson |
+| [Part C's graft sections](lessons/05-part-c-connected-game.md) | The network additions you graft into the game — copyable code blocks, right in the lesson |
 | [`code/web_remote.py`](code/web_remote.py) | Part D: the board serves a control page to your phone |
 | [`code/scoreboard_server.py`](code/scoreboard_server.py) | Single-file twin of the class scoreboard (normal Python 3) — the class instance runs in the cloud ([`scoreboard-cloud/`](../../scoreboard-cloud/)); this one is the offline fallback, and yours to run at home |
 

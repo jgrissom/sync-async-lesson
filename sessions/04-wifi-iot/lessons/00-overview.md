@@ -1,6 +1,6 @@
 # Session Overview & Timing
 
-[← Back to session home](../README.md) · **Next:** [Warm-up: Getting on the Network →](01-setup.md)
+[← Back to session home](../README.md) · **Next:** [Opening Walkthrough →](01-walkthrough.md)
 
 ---
 
@@ -37,4 +37,4 @@ By the end of the session, students will be able to:
 
 ---
 
-[← Back to session home](../README.md) · **Next:** [Warm-up: Getting on the Network →](01-setup.md)
+[← Back to session home](../README.md) · **Next:** [Opening Walkthrough →](01-walkthrough.md)

@@ -2,7 +2,7 @@
 
 ⏱️ **~25 min bonus** · *not part of the core 3.5 hours*
 
-[← Part C](04-part-c-connected-game.md) · [Session home](../README.md) · **Next:** [Assignment →](../assignment/README.md)
+[← Part C](05-part-c-connected-game.md) · [Session home](../README.md) · **Next:** [Assignment →](../assignment/README.md)
 
 ---
 
@@ -49,4 +49,4 @@ Because inbound connections are the first casualty of real-world networks — cl
 
 ---
 
-[← Part C](04-part-c-connected-game.md) · [Session home](../README.md) · **Next:** [Assignment →](../assignment/README.md)
+[← Part C](05-part-c-connected-game.md) · [Session home](../README.md) · **Next:** [Assignment →](../assignment/README.md)

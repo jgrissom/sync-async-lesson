@@ -2,7 +2,7 @@
 
 ⏱️ **35 min**
 
-[← Setup](01-setup.md) · [Session home](../README.md) · **Next:** [Part B — Async Requests →](03-part-b-async-requests.md)
+[← Setup](02-setup.md) · [Session home](../README.md) · **Next:** [Part B — Async Requests →](04-part-b-async-requests.md)
 
 ---
 
@@ -152,4 +152,4 @@ Each request opens a network socket, and the board only has a handful. Without `
 
 ---
 
-[← Setup](01-setup.md) · [Session home](../README.md) · **Next:** [Part B — Async Requests →](03-part-b-async-requests.md)
+[← Setup](02-setup.md) · [Session home](../README.md) · **Next:** [Part B — Async Requests →](04-part-b-async-requests.md)

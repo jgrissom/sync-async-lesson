@@ -2,7 +2,7 @@
 
 ⏱️ **40 min**
 
-[← Part A](02-part-a-requests.md) · [Session home](../README.md) · **Next:** [Part C — Your Game Goes Online →](04-part-c-connected-game.md)
+[← Part A](03-part-a-requests.md) · [Session home](../README.md) · **Next:** [Part C — Your Game Goes Online →](05-part-c-connected-game.md)
 
 ---
 
@@ -101,4 +101,4 @@ Reports can pile up — three rounds played, three POST tasks still in flight. U
 
 ---
 
-[← Part A](02-part-a-requests.md) · [Session home](../README.md) · **Next:** [Part C — Your Game Goes Online →](04-part-c-connected-game.md)
+[← Part A](03-part-a-requests.md) · [Session home](../README.md) · **Next:** [Part C — Your Game Goes Online →](05-part-c-connected-game.md)
